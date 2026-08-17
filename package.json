@@ -1,14 +1,16 @@
 {
-  "name": "fantabuzzer-rilanci",
-  "version": "1.0.0",
+  "name": "fantabuzzer-v2-auto",
+  "version": "2.0.0",
   "private": true,
-  "description": "Web app locale per asta fantacalcio con rilanci in tempo reale",
+  "description": "Asta fantacalcio mobile con assegnazione automatica",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.21.2",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "multer": "^1.4.5-lts.1",
+    "xlsx": "^0.18.5"
   }
 }

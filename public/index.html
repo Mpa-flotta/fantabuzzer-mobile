@@ -2,93 +2,55 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-  <meta name="theme-color" content="#0d1117" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="manifest" href="/manifest.json" />
-  <title>Fantabuzzer Mobile</title>
-  <link rel="stylesheet" href="/style.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Fantabuzzer</title>
+<link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <main class="wrap">
-    <header class="topbar">
-      <div>
-        <h1>⚽ Fantabuzzer</h1>
-        <p class="muted">Rilanci live</p>
-      </div>
-      <button id="installBtn" class="ghost hidden">Installa</button>
-    </header>
+<main class="wrap">
+<header class="topbar">
+<div><h1>⚽ Fantabuzzer</h1><p class="muted">Squadra</p></div>
+<a class="linkbtn" href="/admin.html">Admin</a>
+</header>
 
-    <section id="joinCard" class="card join">
-      <h2>Entra nell'asta</h2>
-      <input id="team" maxlength="24" placeholder="Nome squadra" autocomplete="off" />
-      <button id="joinBtn" class="primary big">Entra</button>
-      <p class="hint">Apri questa pagina dal telefono e tienila in primo piano durante l'asta.</p>
-    </section>
+<section id="joinCard" class="card">
+<h2>Entra con la tua squadra</h2>
+<input id="team" placeholder="Nome squadra">
+<button id="joinBtn" class="primary big">Entra</button>
+</section>
 
-    <section id="auctionCard" class="auction hidden">
-      <div class="hero card">
-        <div class="eyebrow">GIOCATORE IN ASTA</div>
-        <div class="player" id="player">Nessun giocatore</div>
-        <div class="priceRow">
-          <div>
-            <div class="eyebrow">PREZZO</div>
-            <div class="price"><span id="price">0</span></div>
-          </div>
-          <div>
-            <div class="eyebrow">TEMPO</div>
-            <div class="timer" id="timer">--</div>
-          </div>
-        </div>
-        <div class="leader" id="leader">Nessuna offerta</div>
-        <p id="status" class="status">Asta ferma</p>
-      </div>
+<section id="teamCard" class="hidden">
+<section class="card summary">
+<div><small>SQUADRA</small><b id="myTeam">-</b></div>
+<div><small>BUDGET</small><b id="myBudget">-</b></div>
+<div><small>GIOCATORI</small><b id="myCount">0</b></div>
+</section>
 
-      <section class="bidPanel">
-        <button class="bid" data-inc="1"><span>+1</span><small>credito</small></button>
-        <button class="bid" data-inc="2"><span>+2</span><small>crediti</small></button>
-        <button class="bid" data-inc="5"><span>+5</span><small>crediti</small></button>
-      </section>
-    </section>
+<section class="card hero">
+<div class="eyebrow">GIOCATORE IN ASTA</div>
+<div id="player" class="player">Nessun giocatore</div>
+<div class="priceRow">
+<div><div class="eyebrow">PREZZO</div><div id="price" class="price">0</div></div>
+<div><div class="eyebrow">TEMPO</div><div id="timer" class="timer">--</div></div>
+</div>
+<div id="leader" class="leader">Nessuna offerta</div>
+</section>
 
-    <section class="card">
-      <details>
-        <summary>🛠 Pannello battitore / admin</summary>
-        <div class="admin">
-          <input id="adminPlayer" placeholder="Nome giocatore" />
-          <div class="row">
-            <label>Base
-              <input id="startPrice" type="number" min="0" value="1">
-            </label>
-            <label>Timer
-              <input id="duration" type="number" min="3" max="30" value="7">
-            </label>
-          </div>
-          <button id="startBtn" class="primary">Avvia nuova asta</button>
-          <div class="row buttons">
-            <button id="pauseBtn">Pausa</button>
-            <button id="resumeBtn">Riprendi</button>
-          </div>
-          <button id="resetBtn" class="danger full">Reset asta</button>
-        </div>
-      </details>
-    </section>
+<section class="bidPanel">
+<button class="bid" data-inc="1">+1</button>
+<button class="bid" data-inc="2">+2</button>
+<button class="bid" data-inc="5">+5</button>
+</section>
 
-    <section class="card">
-      <h2>Connessi</h2>
-      <div id="teams" class="chips"></div>
-    </section>
-
-    <section class="card">
-      <h2>Ultimi rilanci</h2>
-      <div id="history" class="history muted">Ancora nessun rilancio</div>
-    </section>
-  </main>
-
-  <div id="toast" class="toast hidden"></div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/app.js"></script>
+<section class="card">
+<h2>La mia rosa</h2>
+<div id="roster"></div>
+</section>
+</section>
+</main>
+<div id="toast" class="toast hidden"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/team.js"></script>
 </body>
 </html>

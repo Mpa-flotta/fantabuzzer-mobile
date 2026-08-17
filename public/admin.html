@@ -1,0 +1,78 @@
+
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fantabuzzer Admin</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="wrap adminWrap">
+<header class="topbar">
+<div><h1>🛠 Admin</h1><p class="muted">Gestione asta</p></div>
+<a class="linkbtn" href="/">Squadra</a>
+</header>
+
+<section class="card">
+<h2>Importa giocatori</h2>
+<input id="file" type="file" accept=".xlsx,.xls">
+<button id="importBtn" class="primary">Importa Excel</button>
+<p id="importInfo" class="muted"></p>
+</section>
+
+<section class="card">
+<h2>Chiama giocatore</h2>
+<input id="search" placeholder="Cerca nome, ruolo o squadra...">
+<div id="results" class="results"></div>
+<div class="two">
+<input id="startPrice" type="number" value="1" min="0" placeholder="Prezzo iniziale">
+<input id="duration" type="number" value="7" min="3" max="30" placeholder="Timer">
+</div>
+<button id="startBtn" class="primary">Avvia asta</button>
+</section>
+
+<section class="card hero">
+<div class="eyebrow">ASTA ATTUALE</div>
+<div id="aPlayer" class="player">Nessun giocatore</div>
+<div class="priceRow">
+<div><div class="eyebrow">PREZZO</div><div id="aPrice" class="price">0</div></div>
+<div><div class="eyebrow">TEMPO</div><div id="aTimer" class="timer">--</div></div>
+</div>
+<div id="aLeader" class="leader">Nessuna offerta</div>
+<div class="two">
+<button id="pauseBtn">Pausa</button>
+<button id="resumeBtn">Riprendi</button>
+</div>
+<button id="resetBtn" class="danger full">Annulla asta corrente</button>
+</section>
+
+<section class="card">
+<h2>Squadre e rose</h2>
+<div class="two">
+<input id="newTeam" placeholder="Nome squadra">
+<input id="newBudget" type="number" value="500" min="1" placeholder="Budget">
+</div>
+<button id="createTeamBtn" class="primary">Aggiungi squadra</button>
+<div id="teams"></div>
+</section>
+
+<section class="card">
+<h2>Giocatori</h2>
+<input id="poolFilter" placeholder="Filtra elenco...">
+<p id="counts" class="muted"></p>
+<div id="players"></div>
+</section>
+
+<section class="card">
+<h2>Storico acquisti</h2>
+<button id="undoBtn">↩ Annulla ultimo acquisto</button>
+<div id="purchases"></div>
+</section>
+</main>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/admin.js"></script>
+</body>
+</html>
