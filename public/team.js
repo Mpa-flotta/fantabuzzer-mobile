@@ -32,6 +32,7 @@ document.querySelectorAll(".bid").forEach(btn => {
 });
 
 socket.on("bid:error", ({ message }) => toast(message));
+socket.on("team:error", ({ message }) => { toast(message); localStorage.removeItem("fantabuzzerTeam"); });
 
 socket.on("auction:sold", ({ playerName, team, price }) => {
   if (navigator.vibrate) navigator.vibrate([120, 50, 120]);

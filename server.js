@@ -15,7 +15,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 const ROLE_LIMITS = { P: 3, D: 8, C: 8, A: 6 };
-const DEFAULT_BUDGET = 500;
+const DEFAULT_BUDGET = 1000;
+const MAX_TEAMS = 10;
+const MIN_CREDIT_PER_REMAINING_SLOT = 1;
 
 const state = {
   auction: {
@@ -26,7 +28,7 @@ const state = {
     leader: "",
     running: false,
     endsAt: null,
-    duration: 7,
+    duration: 10,
     history: []
   },
   players: [],
@@ -78,6 +80,19 @@ function remainingBudget(team) {
   return team.budget - team.spent;
 }
 
+function remainingSlotsAfterPurchase(team) {
+  return Math.max(0, 25 - (team.roster.length + 1));
+}
+
+function minimumReserveAfterPurchase(team) {
+  return remainingSlotsAfterPurchase(team) * MIN_CREDIT_PER_REMAINING_SLOT;
+}
+
+function canAffordPurchase(team, price) {
+  const afterPurchase = remainingBudget(team) - price;
+  return afterPurchase >= minimumReserveAfterPurchase(team);
+}
+
 function broadcast() {
   io.emit("state", state);
 }
@@ -85,7 +100,7 @@ function broadcast() {
 let timer = null;
 
 function clearAuction() {
-  const duration = state.auction.duration || 7;
+  const duration = state.auction.duration || 10;
   state.auction = {
     playerId: null,
     playerName: "",
@@ -137,9 +152,9 @@ function autoAssign() {
     return;
   }
 
-  if (remainingBudget(team) < a.price) {
+  if (!canAffordPurchase(team, a.price)) {
     io.emit("auction:error", {
-      message: `${team.name} non ha abbastanza crediti per completare l'acquisto`
+      message: `${team.name} non può completare l'acquisto: deve conservare almeno 1 credito per ogni posto ancora libero`
     });
     clearAuction();
     broadcast();
@@ -199,24 +214,38 @@ app.post("/api/import-players", upload.single("file"), (req, res) => {
     if (!req.file) return res.status(400).json({ error: "File mancante" });
 
     const wb = XLSX.read(req.file.buffer, { type: "buffer" });
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(ws, { defval: "" });
+    const requiredSheets = ["Portieri", "Difensori", "Centrocampisti", "Attaccanti"];
+    const missing = requiredSheets.filter(name => !wb.Sheets[name]);
+    if (missing.length) {
+      return res.status(400).json({
+        error: `Nel file mancano i fogli: ${missing.join(", ")}`
+      });
+    }
 
-    state.players = rows.map((row, i) => {
-      const name = norm(rowValue(row, ["nome", "giocatore", "calciatore", "player"]));
-      if (!name) return null;
-      return {
-        id: `${Date.now()}-${i}`,
-        name,
-        club: norm(rowValue(row, ["squadra", "club", "team"])),
-        role: normalizeRole(rowValue(row, ["ruolo", "role"])),
-        quote: Number(rowValue(row, ["quotazione", "quota", "valore", "price"])) || 0,
-        status: "available",
-        boughtBy: "",
-        boughtPrice: 0
-      };
-    }).filter(Boolean);
+    const imported = [];
+    for (const sheetName of requiredSheets) {
+      const ws = wb.Sheets[sheetName];
+      // Riga 1 = titolo; riga 2 = intestazioni reali del file Fantacalcio.
+      const rows = XLSX.utils.sheet_to_json(ws, { defval: "", range: 1 });
 
+      rows.forEach((row, i) => {
+        const name = norm(rowValue(row, ["Nome", "Giocatore", "Calciatore", "Player"]));
+        if (!name) return;
+
+        const sourceId = norm(rowValue(row, ["Id", "ID"]));
+        imported.push({
+          id: sourceId ? `${sheetName}-${sourceId}` : `${sheetName}-${Date.now()}-${i}`,
+          name,
+          club: norm(rowValue(row, ["Squadra", "Club", "Team"])),
+          role: normalizeRole(rowValue(row, ["R", "Ruolo", "Role"])),
+          status: "available",
+          boughtBy: "",
+          boughtPrice: 0
+        });
+      });
+    }
+
+    state.players = imported;
     state.purchases = [];
     Object.values(state.teams).forEach(t => {
       t.spent = 0;
@@ -239,6 +268,10 @@ io.on("connection", socket => {
     if (!name) return;
 
     if (!state.teams[name]) {
+      if (Object.keys(state.teams).length >= MAX_TEAMS) {
+        socket.emit("team:error", { message: "Sono già registrate 10 squadre" });
+        return;
+      }
       state.teams[name] = {
         name,
         budget: DEFAULT_BUDGET,
@@ -271,9 +304,9 @@ io.on("connection", socket => {
     }
 
     const newPrice = a.price + inc;
-    if (newPrice > remainingBudget(team)) {
+    if (!canAffordPurchase(team, newPrice)) {
       socket.emit("bid:error", {
-        message: "Budget insufficiente per questo rilancio"
+        message: "Rilancio non consentito: devi conservare almeno 1 credito per ogni posto ancora libero"
       });
       return;
     }
@@ -298,6 +331,10 @@ io.on("connection", socket => {
     if (!teamName) return;
 
     if (!state.teams[teamName]) {
+      if (Object.keys(state.teams).length >= MAX_TEAMS) {
+        socket.emit("admin:error", { message: "Hai già raggiunto il limite di 10 squadre" });
+        return;
+      }
       state.teams[teamName] = {
         name: teamName,
         budget: Math.max(1, Number(budget) || DEFAULT_BUDGET),
@@ -346,7 +383,7 @@ io.on("connection", socket => {
     const player = state.players.find(p => p.id === playerId && p.status === "available");
     if (!player) return;
 
-    const d = Math.min(30, Math.max(3, Number(duration) || 7));
+    const d = Math.min(30, Math.max(3, Number(duration) || 10));
 
     state.auction = {
       playerId: player.id,

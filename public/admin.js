@@ -93,7 +93,7 @@ function renderResults() {
     ? list.map(p => `
       <button class="result ${selected === p.id ? "sel" : ""}" data-id="${p.id}">
         <b>${esc(p.name)}</b>
-        <span>${esc(p.role)} · ${esc(p.club)} · Q ${p.quote}</span>
+        <span>${esc(p.role)} · ${esc(p.club)}</span>
       </button>`).join("")
     : `<p class="muted">Nessun giocatore disponibile.</p>`;
 
@@ -157,8 +157,6 @@ function renderTeams() {
       });
     };
   });
-    };
-  });
 }
 
 function renderPlayers() {
@@ -180,7 +178,7 @@ function renderPlayers() {
     <div class="rowItem ${p.status}">
       <div>
         <b>${esc(p.name)}</b>
-        <small>${esc(p.role)} · ${esc(p.club)} · Q ${p.quote}</small>
+        <small>${esc(p.role)} · ${esc(p.club)}</small>
       </div>
       <strong>
         ${p.status === "bought"

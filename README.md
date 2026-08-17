@@ -1,41 +1,32 @@
+# Fantabuzzer V4 - configurazione asta 2026/27
 
-# Fantabuzzer V3
+Configurazione:
+- 10 squadre
+- 1000 crediti iniziali
+- Prezzo di partenza 1 credito
+- Timer predefinito 10 secondi, modificabile dall Admin
+- Ogni rilancio fa ripartire il timer
+- Rilanci squadra: +1 / +5 / +10 / +50 / +100
+- Rosa: 3 P / 8 D / 8 C / 6 A = 25 giocatori
+- Il giocatore viene selezionato esclusivamente dall Admin
+- Assegnazione automatica alla scadenza del timer
+- Se non ci sono offerte il giocatore resta disponibile
+- Il sistema conserva almeno 1 credito per ogni posto rosa ancora da riempire
+- A rosa completa (25/25) i rilanci sono bloccati
+- Budget modificabile dall Admin
 
-Funzioni:
-- Admin senza password
-- Import Excel giocatori
-- Rilanci da telefono +1 / +5 / +10 / +50 / +100
-- Timer che riparte a ogni rilancio
-- Assegnazione automatica allo zero
-- Budget residuo aggiornato automaticamente
-- Modifica budget dall'Admin
-- Limiti rosa:
-  - P: 3
-  - D: 8
-  - C: 8
-  - A: 6
-- Blocco rilanci se il ruolo è già pieno
-- Blocco rilanci oltre il budget disponibile
-- Rosa personale per ogni squadra
-- Tutte le rose visibili all'Admin
-- Annulla ultimo acquisto
+## Excel supportato
+La versione e adattata al file `Quotazioni_Fantacalcio_Stagione_2026_27.xlsx`.
+Vengono letti esclusivamente i fogli:
+- Portieri
+- Difensori
+- Centrocampisti
+- Attaccanti
 
-## Excel
-Intestazioni riconosciute:
-- Nome / Giocatore / Calciatore
-- Squadra / Club
-- Ruolo
-- Quotazione
-
-I ruoli possono essere:
-P / POR / Portiere
-D / DIF / Difensore
-C / CEN / Centrocampista
-A / ATT / Attaccante
+La prima riga e il titolo e la seconda riga contiene le intestazioni.
+Vengono utilizzati Id, R, Nome e Squadra.
 
 ## Render
-Build Command:
-npm install
+Build Command: `npm install`
 
-Start Command:
-node server.js
+Start Command: `node server.js`
