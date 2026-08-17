@@ -168,6 +168,7 @@ function autoAssign() {
   team.spent += a.price;
   team.roster.push({
     playerId: player.id,
+    sourceId: player.sourceId,
     name: player.name,
     role: player.role,
     club: player.club,
@@ -176,6 +177,7 @@ function autoAssign() {
 
   state.purchases.unshift({
     playerId: player.id,
+    sourceId: player.sourceId,
     player: player.name,
     role: player.role,
     team: team.name,
@@ -235,6 +237,7 @@ app.post("/api/import-players", upload.single("file"), (req, res) => {
         const sourceId = norm(rowValue(row, ["Id", "ID"]));
         imported.push({
           id: sourceId ? `${sheetName}-${sourceId}` : `${sheetName}-${Date.now()}-${i}`,
+          sourceId,
           name,
           club: norm(rowValue(row, ["Squadra", "Club", "Team"])),
           role: normalizeRole(rowValue(row, ["R", "Ruolo", "Role"])),
@@ -258,6 +261,40 @@ app.post("/api/import-players", upload.single("file"), (req, res) => {
   } catch (e) {
     res.status(500).json({ error: "Errore durante la lettura del file Excel" });
   }
+});
+
+
+function csvCell(value) {
+  const text = String(value ?? "");
+  if (/[",\n\r]/.test(text)) return `"${text.replace(/"/g, '""')}"`;
+  return text;
+}
+
+app.get("/api/export-auction-csv", (req, res) => {
+  const lines = [];
+  const teams = Object.values(state.teams);
+
+  teams.forEach(team => {
+    if (!team.roster.length) return;
+
+    // Il file di riferimento usa una riga $,$,$ come separatore tra le squadre.
+    lines.push("$,$,$");
+
+    team.roster.forEach(player => {
+      const sourceId = norm(player.sourceId);
+      if (!sourceId) return;
+      lines.push([
+        csvCell(team.name),
+        csvCell(sourceId),
+        csvCell(player.price)
+      ].join(","));
+    });
+  });
+
+  const csv = lines.join("\n") + (lines.length ? "\n" : "");
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader("Content-Disposition", 'attachment; filename="fanta-asta-rosters.csv"');
+  res.send(csv);
 });
 
 io.on("connection", socket => {

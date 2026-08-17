@@ -32,3 +32,9 @@ Build Command: `npm install`
 Start Command: `node server.js`
 
 - Pulsante Cambia squadra per uscire dal profilo salvato sul telefono
+
+## Export CSV asta
+- Conserva l'ID originale del giocatore presente nella colonna `Id` del file Fantacalcio.
+- L'Admin può scaricare `fanta-asta-rosters.csv`.
+- Il formato replica il file campione: riga `$,$,$` prima di ogni squadra, poi `Nome Squadra,Id,Prezzo`.
+- Il nome del giocatore non viene inserito nel CSV finale perché il formato campione usa l'ID come riferimento.

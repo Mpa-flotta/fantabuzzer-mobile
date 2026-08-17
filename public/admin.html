@@ -68,7 +68,11 @@
 
 <section class="card">
 <h2>Storico acquisti</h2>
+<div class="two actionRow">
 <button id="undoBtn">↩ Annulla ultimo acquisto</button>
+<a class="linkbtn exportBtn" href="/api/export-auction-csv">⬇ Scarica CSV asta</a>
+</div>
+<p class="muted small exportNote">Formato: Nome squadra, ID Fantacalcio, prezzo di acquisto.</p>
 <div id="purchases"></div>
 </section>
 </main>
