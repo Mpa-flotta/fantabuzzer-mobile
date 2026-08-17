@@ -24,12 +24,20 @@
 <section class="card summary">
 <div><small>SQUADRA</small><b id="myTeam">-</b></div>
 <div><small>BUDGET</small><b id="myBudget">-</b></div>
-<div><small>GIOCATORI</small><b id="myCount">0</b></div>
+<div><small>ROSA</small><b id="myCount">0/25</b></div>
+</section>
+
+<section class="card limits">
+<div><span>P</span><b id="cntP">0/3</b></div>
+<div><span>D</span><b id="cntD">0/8</b></div>
+<div><span>C</span><b id="cntC">0/8</b></div>
+<div><span>A</span><b id="cntA">0/6</b></div>
 </section>
 
 <section class="card hero">
 <div class="eyebrow">GIOCATORE IN ASTA</div>
 <div id="player" class="player">Nessun giocatore</div>
+<div id="playerRole" class="roleBadge">-</div>
 <div class="priceRow">
 <div><div class="eyebrow">PREZZO</div><div id="price" class="price">0</div></div>
 <div><div class="eyebrow">TEMPO</div><div id="timer" class="timer">--</div></div>
@@ -49,6 +57,7 @@
 </section>
 </section>
 </main>
+
 <div id="toast" class="toast hidden"></div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/team.js"></script>

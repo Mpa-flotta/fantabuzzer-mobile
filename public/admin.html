@@ -15,7 +15,8 @@
 </header>
 
 <section class="card">
-<h2>Importa giocatori</h2>
+<h2>Importa giocatori da Excel</h2>
+<p class="muted small">Colonne: Nome, Squadra, Ruolo, Quotazione</p>
 <input id="file" type="file" accept=".xlsx,.xls">
 <button id="importBtn" class="primary">Importa Excel</button>
 <p id="importInfo" class="muted"></p>
@@ -35,6 +36,7 @@
 <section class="card hero">
 <div class="eyebrow">ASTA ATTUALE</div>
 <div id="aPlayer" class="player">Nessun giocatore</div>
+<div id="aRole" class="roleBadge">-</div>
 <div class="priceRow">
 <div><div class="eyebrow">PREZZO</div><div id="aPrice" class="price">0</div></div>
 <div><div class="eyebrow">TEMPO</div><div id="aTimer" class="timer">--</div></div>
@@ -48,7 +50,7 @@
 </section>
 
 <section class="card">
-<h2>Squadre e rose</h2>
+<h2>Squadre e budget</h2>
 <div class="two">
 <input id="newTeam" placeholder="Nome squadra">
 <input id="newBudget" type="number" value="500" min="1" placeholder="Budget">

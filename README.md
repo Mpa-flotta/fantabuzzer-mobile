@@ -1,27 +1,38 @@
 
-# Fantabuzzer V2 Auto
+# Fantabuzzer V3
 
-Funzioni principali:
+Funzioni:
 - Admin senza password
 - Import Excel giocatori
-- Ricerca e chiamata giocatore
-- Rilanci +1 / +2 / +5 da telefono
+- Rilanci da telefono +1 / +2 / +5
 - Timer che riparte a ogni rilancio
-- Assegnazione AUTOMATICA allo scadere del timer
-- Aggiornamento automatico rosa e budget della squadra vincente
-- Aggiornamento automatico pannello Admin
-- Il giocatore acquistato diventa non disponibile
-- Se non ci sono offerte, il giocatore resta disponibile
-- Blocco rilanci oltre il budget
-- Storico acquisti
+- Assegnazione automatica allo zero
+- Budget residuo aggiornato automaticamente
+- Modifica budget dall'Admin
+- Aumenti rapidi budget +1 / +5 / +10 / +50 / +100
+- Limiti rosa:
+  - P: 3
+  - D: 8
+  - C: 8
+  - A: 6
+- Blocco rilanci se il ruolo è già pieno
+- Blocco rilanci oltre il budget disponibile
+- Rosa personale per ogni squadra
+- Tutte le rose visibili all'Admin
 - Annulla ultimo acquisto
 
 ## Excel
 Intestazioni riconosciute:
-Nome/Giocatore/Calciatore
-Squadra/Club
-Ruolo
-Quotazione
+- Nome / Giocatore / Calciatore
+- Squadra / Club
+- Ruolo
+- Quotazione
+
+I ruoli possono essere:
+P / POR / Portiere
+D / DIF / Difensore
+C / CEN / Centrocampista
+A / ATT / Attaccante
 
 ## Render
 Build Command:

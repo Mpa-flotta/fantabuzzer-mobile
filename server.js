@@ -14,10 +14,14 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
+const ROLE_LIMITS = { P: 3, D: 8, C: 8, A: 6 };
+const DEFAULT_BUDGET = 500;
+
 const state = {
   auction: {
     playerId: null,
     playerName: "",
+    playerRole: "",
     price: 0,
     leader: "",
     running: false,
@@ -27,36 +31,76 @@ const state = {
   },
   players: [],
   teams: {},
-  purchases: [],
-  defaultBudget: 500
+  purchases: []
 };
 
-function norm(v){ return String(v ?? "").trim(); }
-function k(v){
-  return norm(v).toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]/g,"");
+function norm(v) {
+  return String(v ?? "").trim();
 }
-function rowVal(row, names){
-  const m = {};
-  Object.keys(row).forEach(x => m[k(x)] = row[x]);
-  for (const n of names) if (m[k(n)] !== undefined) return m[k(n)];
+
+function key(v) {
+  return norm(v).toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
+function rowValue(row, candidates) {
+  const map = {};
+  Object.keys(row).forEach(k => map[key(k)] = row[k]);
+  for (const c of candidates) {
+    const v = map[key(c)];
+    if (v !== undefined) return v;
+  }
   return "";
 }
-function broadcast(){ io.emit("state", state); }
+
+function normalizeRole(v) {
+  const x = key(v).toUpperCase();
+  if (["P", "POR", "PORTIERE", "PORTIERI"].includes(x)) return "P";
+  if (["D", "DIF", "DIFENSORE", "DIFENSORI"].includes(x)) return "D";
+  if (["C", "CEN", "CENTROCAMPISTA", "CENTROCAMPISTI"].includes(x)) return "C";
+  if (["A", "ATT", "ATTACCANTE", "ATTACCANTI"].includes(x)) return "A";
+  return norm(v).toUpperCase();
+}
+
+function roleCount(team, role) {
+  return team.roster.filter(p => p.role === role).length;
+}
+
+function canTakeRole(team, role) {
+  const limit = ROLE_LIMITS[role];
+  if (!limit) return true;
+  return roleCount(team, role) < limit;
+}
+
+function remainingBudget(team) {
+  return team.budget - team.spent;
+}
+
+function broadcast() {
+  io.emit("state", state);
+}
 
 let timer = null;
 
-function clearAuction(keepDuration=true){
-  const d = keepDuration ? (state.auction.duration || 7) : 7;
+function clearAuction() {
+  const duration = state.auction.duration || 7;
   state.auction = {
-    playerId:null, playerName:"", price:0, leader:"",
-    running:false, endsAt:null, duration:d, history:[]
+    playerId: null,
+    playerName: "",
+    playerRole: "",
+    price: 0,
+    leader: "",
+    running: false,
+    endsAt: null,
+    duration,
+    history: []
   };
   if (timer) clearTimeout(timer);
 }
 
-function autoAssignAtEnd(){
+function autoAssign() {
   const a = state.auction;
   if (!a.playerId) return;
 
@@ -84,12 +128,18 @@ function autoAssignAtEnd(){
     return;
   }
 
-  const finalPrice = a.price;
-  const remaining = team.budget - team.spent;
-
-  if (remaining < finalPrice) {
+  if (!canTakeRole(team, player.role)) {
     io.emit("auction:error", {
-      message: "Assegnazione annullata: budget insufficiente."
+      message: `${team.name} ha già raggiunto il limite per il ruolo ${player.role}`
+    });
+    clearAuction();
+    broadcast();
+    return;
+  }
+
+  if (remainingBudget(team) < a.price) {
+    io.emit("auction:error", {
+      message: `${team.name} non ha abbastanza crediti per completare l'acquisto`
     });
     clearAuction();
     broadcast();
@@ -98,36 +148,37 @@ function autoAssignAtEnd(){
 
   player.status = "bought";
   player.boughtBy = team.name;
-  player.boughtPrice = finalPrice;
+  player.boughtPrice = a.price;
 
-  team.spent += finalPrice;
+  team.spent += a.price;
   team.roster.push({
     playerId: player.id,
     name: player.name,
     role: player.role,
     club: player.club,
-    price: finalPrice
+    price: a.price
   });
 
   state.purchases.unshift({
     playerId: player.id,
     player: player.name,
+    role: player.role,
     team: team.name,
-    price: finalPrice,
+    price: a.price,
     t: Date.now()
   });
 
   io.emit("auction:sold", {
     playerName: player.name,
     team: team.name,
-    price: finalPrice
+    price: a.price
   });
 
   clearAuction();
   broadcast();
 }
 
-function armTimer(){
+function armTimer() {
   if (timer) clearTimeout(timer);
   const a = state.auction;
   if (!a.running || !a.endsAt) return;
@@ -138,27 +189,28 @@ function armTimer(){
         state.auction.endsAt &&
         Date.now() >= state.auction.endsAt) {
       state.auction.running = false;
-      autoAssignAtEnd();
+      autoAssign();
     }
-  }, ms + 60);
+  }, ms + 70);
 }
 
-app.post("/api/import-players", upload.single("file"), (req,res) => {
-  try{
-    if (!req.file) return res.status(400).json({error:"File mancante"});
-    const wb = XLSX.read(req.file.buffer,{type:"buffer"});
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const rows = XLSX.utils.sheet_to_json(ws,{defval:""});
+app.post("/api/import-players", upload.single("file"), (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: "File mancante" });
 
-    state.players = rows.map((row,i) => {
-      const name = norm(rowVal(row,["nome","giocatore","calciatore","player"]));
+    const wb = XLSX.read(req.file.buffer, { type: "buffer" });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { defval: "" });
+
+    state.players = rows.map((row, i) => {
+      const name = norm(rowValue(row, ["nome", "giocatore", "calciatore", "player"]));
       if (!name) return null;
       return {
         id: `${Date.now()}-${i}`,
         name,
-        club: norm(rowVal(row,["squadra","club","team"])),
-        role: norm(rowVal(row,["ruolo","role"])).toUpperCase(),
-        quote: Number(rowVal(row,["quotazione","quota","valore","price"])) || 0,
+        club: norm(rowValue(row, ["squadra", "club", "team"])),
+        role: normalizeRole(rowValue(row, ["ruolo", "role"])),
+        quote: Number(rowValue(row, ["quotazione", "quota", "valore", "price"])) || 0,
         status: "available",
         boughtBy: "",
         boughtPrice: 0
@@ -170,48 +222,59 @@ app.post("/api/import-players", upload.single("file"), (req,res) => {
       t.spent = 0;
       t.roster = [];
     });
-    clearAuction(false);
+    clearAuction();
     broadcast();
-    res.json({ok:true,count:state.players.length});
-  }catch(e){
-    res.status(500).json({error:"Errore lettura Excel",detail:e.message});
+
+    res.json({ ok: true, count: state.players.length });
+  } catch (e) {
+    res.status(500).json({ error: "Errore durante la lettura del file Excel" });
   }
 });
 
 io.on("connection", socket => {
   socket.emit("state", state);
 
-  socket.on("team:join", ({team}) => {
-    const name = norm(team).slice(0,30);
+  socket.on("team:join", ({ team }) => {
+    const name = norm(team).slice(0, 30);
     if (!name) return;
+
     if (!state.teams[name]) {
       state.teams[name] = {
         name,
-        budget: state.defaultBudget,
+        budget: DEFAULT_BUDGET,
         spent: 0,
         roster: []
       };
     }
+
     socket.data.team = name;
     broadcast();
   });
 
-  socket.on("team:bid", ({amount}) => {
+  socket.on("team:bid", ({ amount }) => {
     const a = state.auction;
     const teamName = socket.data.team;
     if (!a.running || !a.playerId || !teamName) return;
 
     const inc = Number(amount);
-    if (![1,2,5].includes(inc)) return;
+    if (![1, 2, 5].includes(inc)) return;
 
     const team = state.teams[teamName];
-    if (!team) return;
+    const player = state.players.find(p => p.id === a.playerId);
+    if (!team || !player) return;
+
+    if (!canTakeRole(team, player.role)) {
+      socket.emit("bid:error", {
+        message: `Hai già raggiunto il limite per il ruolo ${player.role}`
+      });
+      return;
+    }
 
     const newPrice = a.price + inc;
-    const remaining = team.budget - team.spent;
-
-    if (newPrice > remaining) {
-      socket.emit("bid:error",{message:"Budget insufficiente"});
+    if (newPrice > remainingBudget(team)) {
+      socket.emit("bid:error", {
+        message: "Budget insufficiente per questo rilancio"
+      });
       return;
     }
 
@@ -219,43 +282,84 @@ io.on("connection", socket => {
     a.leader = teamName;
     a.endsAt = Date.now() + a.duration * 1000;
     a.history.unshift({
-      t:Date.now(), team:teamName, amount:inc, price:newPrice
+      t: Date.now(),
+      team: teamName,
+      amount: inc,
+      price: newPrice
     });
-    a.history = a.history.slice(0,100);
+    a.history = a.history.slice(0, 100);
 
     armTimer();
     broadcast();
   });
 
-  socket.on("admin:createTeam", ({name,budget}) => {
-    const n = norm(name).slice(0,30);
-    if (!n) return;
-    if (!state.teams[n]) {
-      state.teams[n] = {
-        name:n,
-        budget:Math.max(1,Number(budget)||state.defaultBudget),
-        spent:0,
-        roster:[]
+  socket.on("admin:createTeam", ({ name, budget }) => {
+    const teamName = norm(name).slice(0, 30);
+    if (!teamName) return;
+
+    if (!state.teams[teamName]) {
+      state.teams[teamName] = {
+        name: teamName,
+        budget: Math.max(1, Number(budget) || DEFAULT_BUDGET),
+        spent: 0,
+        roster: []
       };
     }
     broadcast();
   });
 
-  socket.on("admin:start", ({playerId,startPrice,duration}) => {
-    const p = state.players.find(x => x.id === playerId && x.status === "available");
-    if (!p) return;
+  socket.on("admin:setBudget", ({ team, budget }) => {
+    const t = state.teams[team];
+    if (!t) return;
 
-    const d = Math.min(30,Math.max(3,Number(duration)||7));
+    const value = Number(budget);
+    if (!Number.isFinite(value)) return;
+
+    if (value < t.spent) {
+      socket.emit("admin:error", {
+        message: `Il budget non può essere inferiore ai ${t.spent} crediti già spesi`
+      });
+      return;
+    }
+
+    t.budget = value;
+    broadcast();
+  });
+
+  socket.on("admin:adjustBudget", ({ team, delta }) => {
+    const t = state.teams[team];
+    if (!t) return;
+
+    const next = t.budget + Number(delta || 0);
+    if (next < t.spent) {
+      socket.emit("admin:error", {
+        message: "Non puoi scendere sotto i crediti già spesi"
+      });
+      return;
+    }
+
+    t.budget = next;
+    broadcast();
+  });
+
+  socket.on("admin:start", ({ playerId, startPrice, duration }) => {
+    const player = state.players.find(p => p.id === playerId && p.status === "available");
+    if (!player) return;
+
+    const d = Math.min(30, Math.max(3, Number(duration) || 7));
+
     state.auction = {
-      playerId:p.id,
-      playerName:p.name,
-      price:Math.max(0,Number(startPrice)||0),
-      leader:"",
-      running:true,
-      endsAt:Date.now()+d*1000,
-      duration:d,
-      history:[]
+      playerId: player.id,
+      playerName: player.name,
+      playerRole: player.role,
+      price: Math.max(0, Number(startPrice) || 0),
+      leader: "",
+      running: true,
+      endsAt: Date.now() + d * 1000,
+      duration: d,
+      history: []
     };
+
     armTimer();
     broadcast();
   });
@@ -270,7 +374,7 @@ io.on("connection", socket => {
   socket.on("admin:resume", () => {
     if (!state.auction.playerId) return;
     state.auction.running = true;
-    state.auction.endsAt = Date.now()+state.auction.duration*1000;
+    state.auction.endsAt = Date.now() + state.auction.duration * 1000;
     armTimer();
     broadcast();
   });
@@ -283,23 +387,26 @@ io.on("connection", socket => {
   socket.on("admin:undoLast", () => {
     const last = state.purchases.shift();
     if (!last) return;
-    const p = state.players.find(x => x.id === last.playerId);
-    const t = state.teams[last.team];
 
-    if (p) {
-      p.status = "available";
-      p.boughtBy = "";
-      p.boughtPrice = 0;
+    const player = state.players.find(p => p.id === last.playerId);
+    const team = state.teams[last.team];
+
+    if (player) {
+      player.status = "available";
+      player.boughtBy = "";
+      player.boughtPrice = 0;
     }
-    if (t) {
-      t.spent = Math.max(0,t.spent-last.price);
-      t.roster = t.roster.filter(x => x.playerId !== last.playerId);
+
+    if (team) {
+      team.spent = Math.max(0, team.spent - last.price);
+      team.roster = team.roster.filter(p => p.playerId !== last.playerId);
     }
+
     broadcast();
   });
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT,"0.0.0.0",()=>{
-  console.log(`Fantabuzzer V2 Auto attivo sulla porta ${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Fantabuzzer V3 attivo sulla porta ${PORT}`);
 });
