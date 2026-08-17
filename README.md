@@ -30,3 +30,5 @@ Vengono utilizzati Id, R, Nome e Squadra.
 Build Command: `npm install`
 
 Start Command: `node server.js`
+
+- Pulsante Cambia squadra per uscire dal profilo salvato sul telefono

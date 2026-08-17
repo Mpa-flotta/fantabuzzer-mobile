@@ -67,3 +67,5 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
 @media(max-width:560px){.quickBudget{grid-template-columns:repeat(3,1fr)}}
 
 @media(max-width:560px){.bidPanel{grid-template-columns:repeat(5,1fr);gap:5px}.bid{min-height:78px;font-size:22px;padding:8px 4px}}
+
+.logoutBtn{width:100%;margin:0 0 10px;background:#30363d;color:#fff}

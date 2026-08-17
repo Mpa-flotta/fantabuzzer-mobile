@@ -18,6 +18,14 @@ function join() {
 
 $("joinBtn").onclick = join;
 
+$("logoutBtn").onclick = () => {
+  localStorage.removeItem("fantabuzzerTeam");
+  myTeam = "";
+  $("teamCard").classList.add("hidden");
+  $("joinCard").classList.remove("hidden");
+  $("team").value = "";
+};
+
 if (myTeam) {
   socket.emit("team:join", { team: myTeam });
   $("joinCard").classList.add("hidden");
