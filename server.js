@@ -257,7 +257,7 @@ io.on("connection", socket => {
     if (!a.running || !a.playerId || !teamName) return;
 
     const inc = Number(amount);
-    if (![1, 2, 5].includes(inc)) return;
+    if (![1, 5, 10, 50, 100].includes(inc)) return;
 
     const team = state.teams[teamName];
     const player = state.players.find(p => p.id === a.playerId);

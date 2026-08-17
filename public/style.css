@@ -30,7 +30,7 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
 .price{font-size:52px;font-weight:950}
 .timer{width:88px;height:88px;border:7px solid var(--accent);border-radius:50%;display:grid;place-items:center;margin:auto;font-size:32px;font-weight:900}
 .leader{margin:16px 0 4px;padding:12px;border-radius:14px;background:#0f2d17;color:#7ee787;font-weight:800}
-.bidPanel{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 0;background:linear-gradient(to top,var(--bg) 70%,transparent);z-index:4}
+.bidPanel{position:sticky;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:10px 0;background:linear-gradient(to top,var(--bg) 70%,transparent);z-index:4}
 .bid{min-height:92px;background:var(--green);font-size:32px}
 .bid:disabled{opacity:.35}
 .summary{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px}
@@ -65,3 +65,5 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
 }
 
 @media(max-width:560px){.quickBudget{grid-template-columns:repeat(3,1fr)}}
+
+@media(max-width:560px){.bidPanel{grid-template-columns:repeat(5,1fr);gap:5px}.bid{min-height:78px;font-size:22px;padding:8px 4px}}

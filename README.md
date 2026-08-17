@@ -4,12 +4,11 @@
 Funzioni:
 - Admin senza password
 - Import Excel giocatori
-- Rilanci da telefono +1 / +2 / +5
+- Rilanci da telefono +1 / +5 / +10 / +50 / +100
 - Timer che riparte a ogni rilancio
 - Assegnazione automatica allo zero
 - Budget residuo aggiornato automaticamente
 - Modifica budget dall'Admin
-- Aumenti rapidi budget +1 / +5 / +10 / +50 / +100
 - Limiti rosa:
   - P: 3
   - D: 8

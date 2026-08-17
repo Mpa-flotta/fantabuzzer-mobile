@@ -132,14 +132,6 @@ function renderTeams() {
             <button data-save-budget="${escAttr(t.name)}">Salva budget</button>
           </div>
 
-          <div class="quickBudget">
-            <button data-delta="1" data-team="${escAttr(t.name)}">+1</button>
-            <button data-delta="5" data-team="${escAttr(t.name)}">+5</button>
-            <button data-delta="10" data-team="${escAttr(t.name)}">+10</button>
-            <button data-delta="50" data-team="${escAttr(t.name)}">+50</button>
-            <button data-delta="100" data-team="${escAttr(t.name)}">+100</button>
-          </div>
-
           ${t.roster.length
             ? t.roster.map(p => `
               <div class="rowItem">
@@ -165,13 +157,6 @@ function renderTeams() {
       });
     };
   });
-
-  document.querySelectorAll("[data-delta]").forEach(btn => {
-    btn.onclick = () => {
-      socket.emit("admin:adjustBudget", {
-        team: btn.dataset.team,
-        delta: Number(btn.dataset.delta)
-      });
     };
   });
 }
