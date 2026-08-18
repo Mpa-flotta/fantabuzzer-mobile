@@ -44,7 +44,7 @@ $("resetBtn").onclick = () => socket.emit("admin:resetAuction");
 
 $("newAuctionBtn").onclick = () => {
   const ok = confirm(
-    "Vuoi iniziare una nuova asta? Verranno azzerati rose, acquisti, crediti spesi e giocatori assegnati. Le squadre resteranno create e torneranno a 1000 crediti."
+    "Vuoi iniziare una nuova asta? Verranno cancellate completamente anche tutte le squadre, oltre a rose, acquisti e storico."
   );
   if (!ok) return;
   socket.emit("admin:newAuction");

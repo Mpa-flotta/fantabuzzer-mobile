@@ -108,3 +108,8 @@ Start Command: `node server.js`
 - Azzera rose, spese e storico
 - Rende di nuovo disponibili tutti i giocatori
 - Chiude e azzera l'asta corrente
+
+## V6.9.6
+- Nuova asta cancella completamente anche tutte le squadre
+- Azzera rose, acquisti, spese, storico e asta corrente
+- Tutti i giocatori tornano disponibili

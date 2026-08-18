@@ -510,30 +510,20 @@ io.on("connection", socket => {
 
 
   socket.on("admin:newAuction", () => {
-    // Ferma qualsiasi timer/asta corrente.
     if (timer) {
       clearTimeout(timer);
       timer = null;
     }
 
-    // Ripristina tutti i giocatori.
     state.players.forEach(player => {
       player.status = "available";
       player.boughtBy = "";
       player.boughtPrice = 0;
     });
 
-    // Azzera completamente lo storico acquisti.
     state.purchases = [];
+    state.teams = {};
 
-    // Mantiene le squadre esistenti, ma le riporta allo stato iniziale.
-    Object.values(state.teams).forEach(team => {
-      team.budget = 1000;
-      team.spent = 0;
-      team.roster = [];
-    });
-
-    // Ripristina anche l'asta corrente.
     state.auction = {
       playerId: null,
       playerName: "",
@@ -547,7 +537,7 @@ io.on("connection", socket => {
     };
 
     io.emit("auction:new", {
-      message: "Nuova asta avviata: tutto azzerato"
+      message: "Nuova asta avviata: squadre e rose cancellate"
     });
 
     broadcast();
