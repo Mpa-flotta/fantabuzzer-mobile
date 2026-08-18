@@ -64,3 +64,7 @@ Start Command: `node server.js`
 - Rosa completa e prezzo sotto ogni squadra
 - Pannello comandi laterale richiudibile
 - Logica asta/timer V6.4 invariata
+
+## V6.7
+- Riquadro principale Giocatore in asta centrato orizzontalmente nella dashboard
+- Nessuna modifica alla logica di timer, rilanci o assegnazione

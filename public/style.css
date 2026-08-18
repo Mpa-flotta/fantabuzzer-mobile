@@ -632,3 +632,43 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
 .tvTeamCard.currentLeader{border-color:#42f5a7!important;box-shadow:0 0 0 2px rgba(66,245,167,.15),0 0 28px rgba(66,245,167,.28),0 12px 30px rgba(2,18,48,.20)!important}.tvTeamName{color:#fff}
 .tvTeamStats div{background:rgba(2,17,43,.58)}.tvTeamStats span{color:#8fb5e9}.tvTeamStats strong{color:#fff}.tvRoles div{background:rgba(19,59,116,.78);border:1px solid rgba(255,255,255,.07)}.tvRoles span{color:#9fc5f7}.tvRoster{border-color:rgba(255,255,255,.10)}.tvRosterRole{background:#174a91;color:#d9ebff}.tvRosterPrice{color:#66f6b5}.tvRosterEmpty{color:#8fb5e9}.leadingBadge{color:#06291b;background:#42f5a7;font-weight:950}
 .primary,.bigAction{background:linear-gradient(135deg,#3B82F6,#55b7ff)!important;border-color:rgba(255,255,255,.12)!important;box-shadow:0 8px 20px rgba(23,104,223,.24)}.controlToggle,.linkbtn{background:rgba(8,32,76,.78)!important;border:1px solid rgba(255,255,255,.14)!important;color:#fff!important}.downloadCsvBtn{background:linear-gradient(135deg,#16a36a,#42f5a7);color:#041d14}
+
+
+/* ===== V6.7 - Card asta centrata ===== */
+
+/* La zona principale occupa tutto lo spazio disponibile */
+.auctionStage{
+  width:100%;
+  min-width:0;
+}
+
+/* Il riquadro Giocatore in asta viene centrato nello schermo */
+.auctionHero{
+  width:min(760px, 92vw) !important;
+  max-width:760px !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+
+/* Quando il pannello comandi è aperto, la card resta centrata
+   nello spazio utile della dashboard */
+.tvMainGrid{
+  align-items:start;
+}
+
+/* Su schermi grandi diamo più respiro alla regia */
+@media(min-width:1101px){
+  .auctionStage{
+    display:block;
+  }
+  .auctionHero{
+    margin-inline:auto !important;
+  }
+}
+
+/* Su telefono/tablet resta adattiva */
+@media(max-width:1100px){
+  .auctionHero{
+    width:min(760px, 100%) !important;
+  }
+}
