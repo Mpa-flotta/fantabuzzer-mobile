@@ -469,23 +469,6 @@ io.on("connection", socket => {
     broadcast();
   });
 
-    // Azzera storico acquisti
-    state.purchases = [];
-
-    // Mantiene le squadre create, ma riparte da zero
-    Object.values(state.teams).forEach(team => {
-      team.budget = 1000;
-      team.spent = 0;
-      team.roster = [];
-    });
-
-    io.emit("auction:new", {
-      message: "Nuova asta avviata"
-    });
-
-    broadcast();
-  });
-
 
   socket.on("admin:reopenLast", () => {
     const last = state.purchases.shift();
