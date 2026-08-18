@@ -92,8 +92,15 @@ function canAffordPurchase(team, price) {
   return afterPurchase >= minimumReserveAfterPurchase(team);
 }
 
+function clientState() {
+  return {
+    ...state,
+    serverNow: Date.now()
+  };
+}
+
 function broadcast() {
-  io.emit("state", state);
+  io.emit("state", clientState());
 }
 
 let timer = null;
@@ -297,7 +304,7 @@ app.get("/api/export-auction-csv", (req, res) => {
 });
 
 io.on("connection", socket => {
-  socket.emit("state", state);
+  socket.emit("state", clientState());
 
   socket.on("team:join", ({ team }) => {
     const name = norm(team).slice(0, 30);
@@ -507,6 +514,27 @@ socket.on("admin:undoLast", () => {
     broadcast();
   });
 });
+
+
+// Timer ufficiale calcolato esclusivamente dal server.
+// Dashboard e telefoni ricevono esattamente lo stesso valore.
+setInterval(() => {
+  const a = state.auction;
+  let remainingMs = 0;
+  let remainingSeconds = 0;
+
+  if (a.running && a.endsAt) {
+    remainingMs = Math.max(0, a.endsAt - Date.now());
+    remainingSeconds = Math.ceil(remainingMs / 1000);
+  }
+
+  io.emit("timer:tick", {
+    running: Boolean(a.running && a.endsAt),
+    remainingMs,
+    remainingSeconds,
+    duration: Number(a.duration) || 10
+  });
+}, 100);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, "0.0.0.0", () => {

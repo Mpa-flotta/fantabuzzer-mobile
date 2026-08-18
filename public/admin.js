@@ -3,6 +3,8 @@ const socket = io();
 const $ = id => document.getElementById(id);
 let state = null;
 let selected = null;
+let serverClockOffset = 0;
+let officialTimer = { running: false, remainingSeconds: 0, remainingMs: 0, duration: 10 };
 
 $("importBtn").onclick = async () => {
   const file = $("file").files[0];
@@ -72,8 +74,14 @@ socket.on("auction:closed", ({ playerName }) => {
 
 socket.on("auction:error", ({ message }) => toast(message));
 
+socket.on("timer:tick", tick => {
+  officialTimer = tick;
+  renderTimer();
+});
+
 socket.on("state", s => {
   state = s;
+  if (Number.isFinite(s.serverNow)) serverClockOffset = s.serverNow - Date.now();
   const a = s.auction;
 
   $("aPlayer").textContent = a.playerName || "Nessun giocatore";
@@ -236,26 +244,21 @@ function renderPurchases() {
 }
 
 function renderTimer() {
-  const auction = state?.auction;
   const timerEl = $("aTimer");
-
+  const ringEl = $("timerRing");
   if (!timerEl) return;
 
-  if (!auction || !auction.running || !auction.endsAt) {
+  if (!officialTimer.running) {
     timerEl.textContent = "--";
-    timerEl.style.setProperty("--progress", "0deg");
+    if (ringEl) ringEl.style.setProperty("--progress", "0");
     return;
   }
 
-  // Fonte unica: timestamp del server. Nessun countdown locale fisso.
-  const remainingMs = Math.max(0, auction.endsAt - Date.now());
-  const remainingSeconds = Math.ceil(remainingMs / 1000);
-  timerEl.textContent = remainingSeconds;
+  timerEl.textContent = officialTimer.remainingSeconds;
 
-  const durationSeconds = Number(auction.duration) || 10;
-  const totalMs = durationSeconds * 1000;
-  const fraction = Math.max(0, Math.min(1, remainingMs / totalMs));
-  timerEl.style.setProperty("--progress", `${fraction * 360}deg`);
+  const totalMs = Math.max(1, Number(officialTimer.duration || 10) * 1000);
+  const fraction = Math.max(0, Math.min(1, officialTimer.remainingMs / totalMs));
+  if (ringEl) ringEl.style.setProperty("--progress", String(fraction * 100));
 }
 
 setInterval(renderTimer, 100);

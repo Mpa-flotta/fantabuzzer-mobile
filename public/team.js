@@ -2,6 +2,8 @@
 const socket = io();
 const $ = id => document.getElementById(id);
 let state = null;
+let serverClockOffset = 0;
+let officialTimer = { running: false, remainingSeconds: 0, remainingMs: 0, duration: 10 };
 let myTeam = localStorage.getItem("fantabuzzerTeam") || "";
 
 $("team").value = myTeam;
@@ -51,8 +53,14 @@ socket.on("auction:closed", ({ playerName }) => {
   toast(`${playerName}: nessuna offerta`);
 });
 
+socket.on("timer:tick", tick => {
+  officialTimer = tick;
+  renderTimer();
+});
+
 socket.on("state", s => {
   state = s;
+  if (Number.isFinite(s.serverNow)) serverClockOffset = s.serverNow - Date.now();
   const a = s.auction;
 
   $("player").textContent = a.playerName || "Nessun giocatore";
@@ -94,12 +102,11 @@ socket.on("state", s => {
 });
 
 function renderTimer() {
-  const a = state?.auction;
-  if (!a?.running || !a.endsAt) {
+  if (!officialTimer.running) {
     $("timer").textContent = "--";
     return;
   }
-  $("timer").textContent = Math.max(0, Math.ceil((a.endsAt - Date.now()) / 1000));
+  $("timer").textContent = officialTimer.remainingSeconds;
 }
 
 setInterval(renderTimer, 150);

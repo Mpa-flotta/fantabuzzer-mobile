@@ -47,3 +47,12 @@ Start Command: `node server.js`
 ## V6.2
 - Countdown dashboard corretto: legge esclusivamente endsAt e duration dal server
 - Durata predefinita fissata a 10 secondi in server e pannello Admin
+
+## V6.3
+- Timer sincronizzato con l'orologio del server
+- Elimina differenze dovute all'ora locale di PC e telefoni
+- Dashboard e squadre calcolano il countdown sulla stessa base temporale
+
+## V6.4
+- Countdown calcolato esclusivamente dal server e trasmesso identico a dashboard e telefoni ogni 100 ms.
+- Eliminata ogni dipendenza dall’orologio locale dei dispositivi.
