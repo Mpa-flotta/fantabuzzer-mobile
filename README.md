@@ -68,3 +68,23 @@ Start Command: `node server.js`
 ## V6.7
 - Riquadro principale Giocatore in asta centrato orizzontalmente nella dashboard
 - Nessuna modifica alla logica di timer, rilanci o assegnazione
+
+## V6.8
+- Restyling completo pagina squadra mobile
+- Tema Blue Arena coerente con dashboard TV
+- Scheda squadra, ruoli, budget e rosa più leggibili
+- Giocatore in asta più centrale
+- Pulsanti rilancio +1/+5/+10/+50/+100 ridisegnati
+- Logica asta invariata
+
+## V6.9
+- Avatar dinamico con iniziali e colore per ruolo
+- Animazione ingresso giocatore
+- Effetto visivo ad ogni rilancio
+- Ultimi 3 secondi evidenziati
+- Overlay AGGIUDICATO su dashboard e telefono
+- Max rilancio visibile nella pagina squadra
+- Rosa squadra migliorata con ruolo, prezzo e spesa per ruolo
+- Squadra in testa più evidente
+- Nuovo comando Admin per riaprire l'ultimo giocatore
+- Logica timer/rilanci della V6.8 mantenuta

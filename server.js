@@ -364,6 +364,11 @@ io.on("connection", socket => {
       price: newPrice
     });
     a.history = a.history.slice(0, 100);
+    io.emit("auction:bidPulse", {
+      team: teamName,
+      price: newPrice,
+      amount: inc
+    });
 
     armTimer();
     broadcast();
@@ -488,6 +493,45 @@ io.on("connection", socket => {
 
     io.emit("auction:new", {
       message: "Nuova asta avviata"
+    });
+
+    broadcast();
+  });
+
+
+  socket.on("admin:reopenLast", () => {
+    const last = state.purchases.shift();
+    if (!last) return;
+
+    const player = state.players.find(p => p.id === last.playerId);
+    const team = state.teams[last.team];
+
+    if (!player || !team) return;
+
+    team.spent = Math.max(0, team.spent - last.price);
+    team.roster = team.roster.filter(p => p.playerId !== last.playerId);
+
+    player.status = "available";
+    player.boughtBy = "";
+    player.boughtPrice = 0;
+
+    const d = state.auction.duration || 10;
+    state.auction = {
+      playerId: player.id,
+      playerName: player.name,
+      playerRole: player.role,
+      price: Math.max(1, last.price),
+      leader: "",
+      running: false,
+      endsAt: null,
+      duration: d,
+      history: []
+    };
+
+    io.emit("auction:reopened", {
+      playerName: player.name,
+      previousTeam: last.team,
+      previousPrice: last.price
     });
 
     broadcast();

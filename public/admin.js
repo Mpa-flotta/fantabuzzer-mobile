@@ -52,6 +52,7 @@ socket.on("auction:new", ({ message }) => {
   toast(message || "Nuova asta avviata");
 });
 
+$("reopenLastBtn").onclick = () => socket.emit("admin:reopenLast");
 $("undoBtn").onclick = () => socket.emit("admin:undoLast");
 
 $("createTeamBtn").onclick = () => {
@@ -65,7 +66,7 @@ $("createTeamBtn").onclick = () => {
 socket.on("admin:error", ({ message }) => toast(message));
 
 socket.on("auction:sold", ({ playerName, team, price }) => {
-  toast(`${playerName} assegnato automaticamente a ${team} per ${price}`);
+  showAdminSoldOverlay(playerName, team, price, state?.auction?.playerRole || "");
 });
 
 socket.on("auction:closed", ({ playerName }) => {
@@ -79,12 +80,37 @@ socket.on("timer:tick", tick => {
   renderTimer();
 });
 
+
+socket.on("auction:bidPulse", ({ team, price }) => {
+  const priceEl = $("aPrice");
+  if (priceEl) {
+    priceEl.classList.remove("pricePulse");
+    void priceEl.offsetWidth;
+    priceEl.classList.add("pricePulse");
+  }
+
+  requestAnimationFrame(() => {
+    document.querySelectorAll(".tvTeamCard").forEach(card => {
+      if (card.dataset.teamName === team) {
+        card.classList.remove("bidFlash");
+        void card.offsetWidth;
+        card.classList.add("bidFlash");
+      }
+    });
+  });
+});
+
+socket.on("auction:reopened", ({ playerName }) => {
+  toast(`${playerName} riaperto per una nuova asta`);
+});
+
 socket.on("state", s => {
   state = s;
   if (Number.isFinite(s.serverNow)) serverClockOffset = s.serverNow - Date.now();
   const a = s.auction;
 
   $("aPlayer").textContent = a.playerName || "Nessun giocatore";
+  renderAdminAvatar(a.playerName, a.playerRole);
   $("aRole").textContent = a.playerRole || "-";
   $("aPrice").textContent = a.price;
   $("aLeader").textContent = a.leader ? `In testa: ${a.leader}` : "Nessuna offerta";
@@ -162,7 +188,7 @@ function renderTeams() {
           : `<div class="tvRosterEmpty">Nessun acquisto</div>`;
 
         return `
-          <article class="tvTeamCard ${isLeader ? "currentLeader" : ""}">
+          <article class="tvTeamCard ${isLeader ? "currentLeader" : ""}" data-team-name="${esc(t.name)}">
             <div class="tvTeamHeader">
               <div class="tvTeamName">${esc(t.name)}</div>
               ${isLeader ? `<div class="leadingBadge">IN TESTA</div>` : ``}
@@ -253,21 +279,32 @@ function renderPurchases() {
 }
 
 function renderTimer() {
+  const auction = state?.auction;
   const timerEl = $("aTimer");
-  const ringEl = $("timerRing");
+  const hero = document.querySelector(".auctionHero");
+
   if (!timerEl) return;
 
-  if (!officialTimer.running) {
+  if (!auction || !auction.running || !auction.endsAt) {
     timerEl.textContent = "--";
-    if (ringEl) ringEl.style.setProperty("--progress", "0");
+    timerEl.style.setProperty("--progress", "0");
+    timerEl.classList.remove("timerDanger");
+    hero?.classList.remove("auctionClosing");
     return;
   }
 
-  timerEl.textContent = officialTimer.remainingSeconds;
+  const remainingMs = Math.max(0, auction.endsAt - Date.now());
+  const seconds = Math.ceil(remainingMs / 1000);
+  timerEl.textContent = seconds;
 
-  const totalMs = Math.max(1, Number(officialTimer.duration || 10) * 1000);
-  const fraction = Math.max(0, Math.min(1, officialTimer.remainingMs / totalMs));
-  if (ringEl) ringEl.style.setProperty("--progress", String(fraction * 100));
+  const durationSeconds = Number(auction.duration) || 10;
+  const totalMs = durationSeconds * 1000;
+  const pct = Math.max(0, Math.min(100, (remainingMs / totalMs) * 100));
+  timerEl.style.setProperty("--progress", pct);
+
+  const danger = seconds <= 3;
+  timerEl.classList.toggle("timerDanger", danger);
+  hero?.classList.toggle("auctionClosing", danger);
 }
 
 setInterval(renderTimer, 100);
@@ -290,4 +327,42 @@ function escAttr(s) {
 
 function cssEscape(s) {
   return CSS.escape(s);
+}
+
+
+function getInitials(name) {
+  const parts = String(name || "").trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "--";
+  if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function applyRoleAvatar(el, role) {
+  if (!el) return;
+  el.classList.remove("roleAvatarP","roleAvatarD","roleAvatarC","roleAvatarA","roleAvatarX");
+  const cls = ["P","D","C","A"].includes(role) ? `roleAvatar${role}` : "roleAvatarX";
+  el.classList.add(cls);
+}
+
+function renderAdminAvatar(name, role) {
+  const avatar = $("adminPlayerAvatar");
+  const initials = $("adminPlayerInitials");
+  if (!avatar || !initials) return;
+  initials.textContent = getInitials(name);
+  applyRoleAvatar(avatar, role);
+}
+
+function showAdminSoldOverlay(playerName, team, price, role) {
+  const overlay = $("adminSoldOverlay");
+  if (!overlay) {
+    toast(`${playerName} assegnato automaticamente a ${team} per ${price}`);
+    return;
+  }
+  $("adminSoldPlayer").textContent = playerName;
+  $("adminSoldTeam").textContent = team;
+  $("adminSoldPrice").textContent = `${price} cr`;
+  $("adminSoldInitials").textContent = getInitials(playerName);
+  applyRoleAvatar($("adminSoldAvatar"), role);
+  overlay.classList.remove("hidden");
+  setTimeout(() => overlay.classList.add("hidden"), 2800);
 }

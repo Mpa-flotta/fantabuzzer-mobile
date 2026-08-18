@@ -1,67 +1,138 @@
-
 <!doctype html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#1768df">
 <title>Fantabuzzer</title>
 <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-<main class="wrap">
-<header class="topbar">
-<div><h1>⚽ Fantabuzzer</h1><p class="muted">Squadra</p></div>
-<a class="linkbtn" href="/admin.html">Admin</a>
+<body class="teamBody">
+
+<main class="teamApp">
+
+<header class="teamTopbar">
+  <div class="teamBrand">
+    <div class="teamBrandIcon">⚽</div>
+    <div>
+      <h1>Fantabuzzer</h1>
+      <p>Asta live</p>
+    </div>
+  </div>
+  <a class="teamAdminLink" href="/admin.html">Admin</a>
 </header>
 
-<section id="joinCard" class="card">
-<h2>Entra con la tua squadra</h2>
-<input id="team" placeholder="Nome squadra">
-<button id="joinBtn" class="primary big">Entra</button>
+<section id="joinCard" class="teamJoinCard">
+  <div class="joinIcon">🏆</div>
+  <h2>Entra nell'asta</h2>
+  <p>Scegli il nome della tua squadra</p>
+  <input id="team" placeholder="Nome squadra" autocomplete="off">
+  <button id="joinBtn" class="teamJoinBtn">Entra</button>
 </section>
 
-<section id="teamCard" class="hidden">
-<button id="logoutBtn" class="logoutBtn">↩ Cambia squadra</button>
-<section class="card summary">
-<div><small>SQUADRA</small><b id="myTeam">-</b></div>
-<div><small>BUDGET</small><b id="myBudget">-</b></div>
-<div><small>ROSA</small><b id="myCount">0/25</b></div>
-</section>
+<section id="teamCard" class="hidden teamContent">
 
-<section class="card limits">
-<div><span>P</span><b id="cntP">0/3</b></div>
-<div><span>D</span><b id="cntD">0/8</b></div>
-<div><span>C</span><b id="cntC">0/8</b></div>
-<div><span>A</span><b id="cntA">0/6</b></div>
-</section>
+  <button id="logoutBtn" class="changeTeamBtn">↩ Cambia squadra</button>
 
-<section class="card hero">
-<div class="eyebrow">GIOCATORE IN ASTA</div>
-<div id="player" class="player">Nessun giocatore</div>
-<div id="playerRole" class="roleBadge">-</div>
-<div class="priceRow">
-<div><div class="eyebrow">PREZZO</div><div id="price" class="price">0</div></div>
-<div><div class="eyebrow">TEMPO</div><div id="timer" class="timer">--</div></div>
-</div>
-<div id="leader" class="leader">Nessuna offerta</div>
-</section>
+  <section class="teamIdentityCard">
+    <div class="teamIdentityMain">
+      <span class="miniLabel">LA TUA SQUADRA</span>
+      <strong id="myTeam">-</strong>
+    </div>
 
-<section class="bidPanel">
-<button class="bid" data-inc="1">+1</button>
-<button class="bid" data-inc="5">+5</button>
-<button class="bid" data-inc="10">+10</button>
-<button class="bid" data-inc="50">+50</button>
-<button class="bid" data-inc="100">+100</button>
-</section>
+    <div class="teamQuickStats">
+      <div>
+        <span>Budget</span>
+        <b id="myBudget">-</b>
+      </div>
+      <div>
+        <span>Max rilancio</span>
+        <b id="myMaxBid">-</b>
+      </div>
+      <div>
+        <span>Rosa</span>
+        <b id="myCount">0/25</b>
+      </div>
+    </div>
+  </section>
 
-<section class="card">
-<h2>La mia rosa</h2>
-<div id="roster"></div>
-</section>
+  <section class="teamRoleCard">
+    <div class="roleMini roleP"><span>P</span><b id="cntP">0/3</b></div>
+    <div class="roleMini roleD"><span>D</span><b id="cntD">0/8</b></div>
+    <div class="roleMini roleC"><span>C</span><b id="cntC">0/8</b></div>
+    <div class="roleMini roleA"><span>A</span><b id="cntA">0/6</b></div>
+  </section>
+
+  <section class="mobileAuctionCard">
+    <div class="mobileAuctionHeader">
+      <span id="playerRole" class="mobileRoleBadge">-</span>
+      <span class="miniLabel">GIOCATORE IN ASTA</span>
+    </div>
+
+    
+    <div id="playerAvatar" class="playerAvatar roleAvatarX">
+      <span id="playerInitials">--</span>
+    </div>
+
+<div id="player" class="mobilePlayerName">Nessun giocatore</div>
+
+    <div class="mobileAuctionNumbers">
+      <div class="mobilePriceBlock">
+        <span>PREZZO</span>
+        <div class="mobilePrice">
+          <strong id="price">0</strong>
+          <small>cr</small>
+        </div>
+      </div>
+
+      <div class="mobileTimerBlock">
+        <span>TEMPO</span>
+        <div id="timer" class="mobileTimer">--</div>
+      </div>
+    </div>
+
+    <div class="mobileLeaderWrap">
+      <span>IN TESTA</span>
+      <div id="leader" class="mobileLeader">Nessuna offerta</div>
+    </div>
+  </section>
+
+  <section class="mobileBidSection">
+    <div class="bidSectionTitle">Rilancia</div>
+    <div class="mobileBidGrid">
+      <button class="bid mobileBid" data-inc="1">+1</button>
+      <button class="bid mobileBid" data-inc="5">+5</button>
+      <button class="bid mobileBid" data-inc="10">+10</button>
+      <button class="bid mobileBid" data-inc="50">+50</button>
+      <button class="bid mobileBid bidBig" data-inc="100">+100</button>
+    </div>
+  </section>
+
+  <section class="myRosterCard">
+    <div class="rosterTitleRow">
+      <div>
+        <span class="miniLabel">ROSA</span>
+        <h2>I miei giocatori</h2>
+      </div>
+    </div>
+    <div id="roleSpendSummary" class="roleSpendSummary"></div>
+    <div id="roster" class="mobileRoster"></div>
+  </section>
+
 </section>
 </main>
 
+<div id="soldOverlay" class="soldOverlay hidden">
+  <div class="soldCard">
+    <div class="soldLabel">AGGIUDICATO</div>
+    <div id="soldAvatar" class="playerAvatar soldAvatar"><span id="soldInitials">--</span></div>
+    <div id="soldPlayer" class="soldPlayer">-</div>
+    <div id="soldTeam" class="soldTeam">-</div>
+    <div id="soldPrice" class="soldPrice">0 cr</div>
+  </div>
+</div>
 <div id="toast" class="toast hidden"></div>
+
 <script src="/socket.io/socket.io.js"></script>
 <script src="/team.js"></script>
 </body>

@@ -672,3 +672,655 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
     width:min(760px, 100%) !important;
   }
 }
+
+
+/* ===== V6.8 - Team Mobile Blue Arena ===== */
+
+.teamBody{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%, rgba(255,255,255,.20), transparent 26%),
+    linear-gradient(160deg,#3B82F6 0%,#1768df 42%,#0756c9 100%);
+  color:#f8fbff;
+  padding-bottom:max(20px,env(safe-area-inset-bottom));
+}
+
+.teamApp{
+  width:min(100%,560px);
+  margin:0 auto;
+  padding:14px 12px 32px;
+}
+
+.teamTopbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 4px 14px;
+}
+
+.teamBrand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.teamBrandIcon{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(255,255,255,.95);
+  box-shadow:0 8px 22px rgba(0,0,0,.15);
+  font-size:22px;
+}
+
+.teamBrand h1{
+  margin:0;
+  font-size:22px;
+  color:#fff;
+}
+
+.teamBrand p{
+  margin:2px 0 0;
+  font-size:12px;
+  color:#d9e9ff;
+}
+
+.teamAdminLink{
+  text-decoration:none;
+  color:#fff;
+  background:rgba(5,27,68,.40);
+  border:1px solid rgba(255,255,255,.16);
+  padding:9px 12px;
+  border-radius:12px;
+  font-weight:800;
+  font-size:13px;
+}
+
+.teamJoinCard,
+.teamIdentityCard,
+.teamRoleCard,
+.mobileAuctionCard,
+.myRosterCard{
+  background:rgba(7,28,67,.88);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 18px 40px rgba(1,17,48,.20);
+  backdrop-filter:blur(12px);
+}
+
+.teamJoinCard{
+  margin-top:40px;
+  padding:24px 18px;
+  border-radius:24px;
+  text-align:center;
+}
+
+.joinIcon{
+  width:58px;
+  height:58px;
+  margin:0 auto 12px;
+  display:grid;
+  place-items:center;
+  border-radius:18px;
+  background:linear-gradient(145deg,#3B82F6,#55b7ff);
+  font-size:28px;
+}
+
+.teamJoinCard h2{
+  margin:0 0 6px;
+  font-size:24px;
+}
+
+.teamJoinCard p{
+  margin:0 0 16px;
+  color:#a9c9ff;
+}
+
+.teamJoinCard input{
+  background:#091c3b;
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+}
+
+.teamJoinBtn{
+  width:100%;
+  margin-top:10px;
+  min-height:54px;
+  border:0;
+  border-radius:15px;
+  background:linear-gradient(135deg,#3B82F6,#55b7ff);
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  box-shadow:0 10px 24px rgba(23,104,223,.28);
+}
+
+.teamContent{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.changeTeamBtn{
+  align-self:flex-start;
+  background:rgba(4,25,62,.52);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  padding:9px 12px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.teamIdentityCard{
+  border-radius:22px;
+  padding:16px;
+}
+
+.teamIdentityMain .miniLabel,
+.myRosterCard .miniLabel{
+  display:block;
+  font-size:10px;
+  letter-spacing:.14em;
+  color:#a9c9ff;
+  font-weight:900;
+}
+
+.teamIdentityMain strong{
+  display:block;
+  margin-top:4px;
+  font-size:26px;
+  line-height:1.05;
+}
+
+.teamQuickStats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+
+.teamQuickStats div{
+  padding:11px 12px;
+  border-radius:14px;
+  background:rgba(2,17,43,.48);
+}
+
+.teamQuickStats span{
+  display:block;
+  font-size:10px;
+  color:#9fc5f7;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.teamQuickStats b{
+  display:block;
+  margin-top:3px;
+  font-size:22px;
+}
+
+.teamRoleCard{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  padding:10px;
+  border-radius:18px;
+}
+
+.roleMini{
+  padding:9px 4px;
+  border-radius:12px;
+  text-align:center;
+  background:rgba(2,17,43,.42);
+}
+
+.roleMini span{
+  display:inline-grid;
+  place-items:center;
+  width:26px;
+  height:26px;
+  border-radius:9px;
+  font-size:12px;
+  font-weight:950;
+  margin-bottom:4px;
+}
+
+.roleMini b{
+  display:block;
+  font-size:15px;
+}
+
+.roleP span{background:#f0ad24;color:#1b1300}
+.roleD span{background:#28c76f;color:#041a0d}
+.roleC span{background:#3B82F6;color:#fff}
+.roleA span{background:#ff4d67;color:#fff}
+
+.mobileAuctionCard{
+  position:relative;
+  overflow:hidden;
+  border-radius:28px;
+  padding:22px 18px 20px;
+  background:
+    radial-gradient(circle at 50% 10%, rgba(59,130,246,.28), transparent 42%),
+    linear-gradient(160deg,#102d5e 0%,#081b3a 65%,#06142d 100%);
+}
+
+.mobileAuctionCard::before{
+  content:"";
+  position:absolute;
+  width:340px;
+  height:340px;
+  border-radius:50%;
+  border:1px solid rgba(85,231,255,.06);
+  left:50%;
+  top:46%;
+  transform:translate(-50%,-50%);
+  box-shadow:
+    0 0 0 45px rgba(85,231,255,.022),
+    0 0 0 90px rgba(85,231,255,.015);
+  pointer-events:none;
+}
+
+.mobileAuctionCard > *{
+  position:relative;
+  z-index:1;
+}
+
+.mobileAuctionHeader{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+}
+
+.mobileRoleBadge{
+  min-width:38px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:#17263e;
+  color:#fff;
+  font-weight:950;
+  text-align:center;
+}
+
+.mobileAuctionHeader .miniLabel{
+  font-size:11px;
+  letter-spacing:.14em;
+  color:#a9c9ff;
+  font-weight:900;
+}
+
+.mobilePlayerName{
+  margin:18px 0 22px;
+  text-align:center;
+  font-size:clamp(34px,10vw,50px);
+  line-height:.98;
+  font-weight:950;
+  letter-spacing:-.035em;
+  word-break:break-word;
+}
+
+.mobileAuctionNumbers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  align-items:center;
+}
+
+.mobilePriceBlock,
+.mobileTimerBlock{
+  text-align:center;
+}
+
+.mobilePriceBlock > span,
+.mobileTimerBlock > span,
+.mobileLeaderWrap > span{
+  display:block;
+  font-size:10px;
+  letter-spacing:.13em;
+  color:#9fc5f7;
+  font-weight:900;
+  margin-bottom:7px;
+}
+
+.mobilePrice{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:4px;
+}
+
+.mobilePrice strong{
+  font-size:58px;
+  line-height:1;
+}
+
+.mobilePrice small{
+  color:#9fc5f7;
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:7px;
+}
+
+.mobileTimer{
+  width:112px;
+  height:112px;
+  margin:auto;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:42px;
+  font-weight:950;
+  background:
+    radial-gradient(circle,#0a2147 58%,transparent 60%),
+    conic-gradient(#55e7ff calc(var(--progress,0)*1%),rgba(255,255,255,.10) 0);
+  box-shadow:0 0 32px rgba(85,231,255,.13);
+}
+
+.mobileLeaderWrap{
+  margin-top:18px;
+  text-align:center;
+}
+
+.mobileLeader{
+  padding:12px;
+  border-radius:15px;
+  background:linear-gradient(90deg,rgba(66,245,167,.14),rgba(85,231,255,.08));
+  border:1px solid rgba(66,245,167,.18);
+  color:#75ffc0;
+  font-size:20px;
+  font-weight:950;
+}
+
+.mobileBidSection{
+  position:sticky;
+  bottom:0;
+  z-index:5;
+  padding:10px 0 calc(10px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,rgba(7,86,201,.98) 72%,rgba(7,86,201,0));
+}
+
+.bidSectionTitle{
+  margin:0 0 7px 4px;
+  color:#e7f1ff;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.mobileBidGrid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+}
+
+.mobileBid{
+  min-height:72px;
+  padding:8px 3px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:16px;
+  background:linear-gradient(160deg,#18a962,#0b8348);
+  color:#fff;
+  font-size:22px;
+  font-weight:950;
+  box-shadow:0 8px 18px rgba(0,0,0,.16);
+}
+
+.mobileBid:active{
+  transform:scale(.96);
+}
+
+.mobileBid:disabled{
+  opacity:.34;
+  filter:saturate(.6);
+}
+
+.bidBig{
+  background:linear-gradient(160deg,#12b5cb,#1677d2);
+}
+
+.myRosterCard{
+  border-radius:22px;
+  padding:16px;
+}
+
+.rosterTitleRow h2{
+  margin:3px 0 8px;
+  font-size:20px;
+}
+
+.mobileRoster .rowItem{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding:11px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.mobileRoster .rowItem:last-child{
+  border-bottom:0;
+}
+
+.mobileRoster .rowItem b{
+  font-size:15px;
+}
+
+.mobileRoster .rowItem small{
+  color:#9fc5f7;
+}
+
+.mobileRoster .rowItem strong{
+  min-width:38px;
+  text-align:center;
+  padding:6px 8px;
+  border-radius:10px;
+  color:#66f6b5;
+  background:rgba(66,245,167,.08);
+}
+
+@media(max-width:390px){
+  .teamApp{padding-inline:9px}
+  .mobileAuctionCard{padding-inline:12px}
+  .mobilePlayerName{font-size:36px}
+  .mobileTimer{width:96px;height:96px;font-size:36px}
+  .mobilePrice strong{font-size:50px}
+  .mobileBid{font-size:18px;min-height:66px}
+}
+
+
+/* ===== V6.9 - Animazioni, avatar e UX asta ===== */
+
+.playerAvatar{
+  width:88px;
+  height:88px;
+  margin:0 auto 12px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  border:3px solid rgba(255,255,255,.22);
+  box-shadow:0 12px 30px rgba(0,0,0,.22);
+  font-size:30px;
+  font-weight:950;
+  letter-spacing:-.04em;
+  color:#fff;
+}
+.adminPlayerAvatar{
+  width:96px;
+  height:96px;
+  font-size:32px;
+  margin-top:14px;
+}
+.roleAvatarP{background:linear-gradient(145deg,#f6c744,#d99100);color:#241800}
+.roleAvatarD{background:linear-gradient(145deg,#42df87,#15924e);color:#062313}
+.roleAvatarC{background:linear-gradient(145deg,#60a5fa,#2563eb)}
+.roleAvatarA{background:linear-gradient(145deg,#ff6b7d,#d82745)}
+.roleAvatarX{background:linear-gradient(145deg,#70839d,#34445a)}
+
+.mobileAuctionCard,
+.auctionHero{
+  animation:auctionEnter .32s ease both;
+}
+@keyframes auctionEnter{
+  from{opacity:.55;transform:translateY(8px) scale(.99)}
+  to{opacity:1;transform:none}
+}
+
+.pricePulse{
+  animation:pricePulse .34s ease;
+}
+@keyframes pricePulse{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.16);filter:brightness(1.35)}
+  100%{transform:scale(1)}
+}
+
+.leaderPulse{
+  animation:leaderPulse .38s ease;
+}
+@keyframes leaderPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.035);box-shadow:0 0 28px rgba(66,245,167,.28)}
+}
+
+.bidFlash{
+  animation:bidFlash .55s ease;
+}
+@keyframes bidFlash{
+  0%{box-shadow:0 0 0 0 rgba(85,231,255,0)}
+  35%{box-shadow:0 0 0 3px rgba(85,231,255,.75),0 0 35px rgba(85,231,255,.35)}
+  100%{box-shadow:0 0 0 0 rgba(85,231,255,0)}
+}
+
+.timerDanger{
+  animation:dangerPulse .65s ease-in-out infinite;
+  color:#fff !important;
+  box-shadow:0 0 0 4px rgba(255,77,103,.16),0 0 34px rgba(255,77,103,.38) !important;
+}
+.auctionClosing{
+  border-color:rgba(255,77,103,.55) !important;
+  box-shadow:0 0 0 2px rgba(255,77,103,.10),0 24px 70px rgba(122,18,39,.20) !important;
+}
+@keyframes dangerPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+}
+
+.soldOverlay{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:rgba(2,12,30,.78);
+  backdrop-filter:blur(14px);
+}
+.soldCard{
+  width:min(520px,94vw);
+  padding:30px 24px;
+  border-radius:30px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(66,245,167,.18),transparent 36%),
+    linear-gradient(160deg,#0f2f59,#071a35);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 30px 80px rgba(0,0,0,.38);
+  animation:soldIn .38s cubic-bezier(.2,.9,.2,1.12) both;
+}
+@keyframes soldIn{
+  from{opacity:0;transform:scale(.86) translateY(18px)}
+  to{opacity:1;transform:none}
+}
+.soldLabel{
+  font-size:14px;
+  letter-spacing:.22em;
+  font-weight:950;
+  color:#65f7b6;
+  margin-bottom:16px;
+}
+.soldAvatar{
+  width:108px;
+  height:108px;
+  font-size:36px;
+}
+.soldPlayer{
+  font-size:clamp(30px,7vw,52px);
+  line-height:1;
+  font-weight:950;
+  margin:12px 0 10px;
+}
+.soldTeam{
+  font-size:clamp(22px,5vw,34px);
+  font-weight:900;
+  color:#75ffc0;
+}
+.soldPrice{
+  margin-top:10px;
+  font-size:26px;
+  font-weight:950;
+  color:#fff;
+}
+
+.teamQuickStats{
+  grid-template-columns:repeat(3,1fr) !important;
+}
+
+.roleSpendSummary{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+  margin:8px 0 10px;
+}
+.roleSpendSummary div{
+  text-align:center;
+  border-radius:11px;
+  padding:7px 4px;
+  background:rgba(2,17,43,.38);
+}
+.roleSpendSummary span{
+  display:block;
+  font-size:9px;
+  color:#9fc5f7;
+}
+.roleSpendSummary b{
+  display:block;
+  margin-top:2px;
+  font-size:14px;
+}
+.roleSpendSummary .totalSpend{
+  background:rgba(66,245,167,.08);
+}
+
+.rosterPlayerMain{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+.rosterRolePill{
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:950;
+}
+.rosterRolePill.role-P{background:#f0ad24;color:#231800}
+.rosterRolePill.role-D{background:#28c76f;color:#062113}
+.rosterRolePill.role-C{background:#3B82F6;color:#fff}
+.rosterRolePill.role-A{background:#ff4d67;color:#fff}
+
+@media(max-width:390px){
+  .playerAvatar{width:76px;height:76px;font-size:26px}
+  .teamQuickStats b{font-size:17px}
+  .roleSpendSummary{grid-template-columns:repeat(5,1fr);gap:4px}
+  .roleSpendSummary b{font-size:12px}
+}

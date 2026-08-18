@@ -53,6 +53,7 @@
           <button id="pauseBtn">⏸ Pausa</button>
           <button id="resumeBtn">▶ Riprendi</button>
           <button id="resetBtn" class="danger">✕ Annulla</button>
+          <button id="reopenLastBtn">↻ Riapri ultimo</button>
         </section>
 
         <details class="controlSection utilityPanel">
@@ -103,7 +104,12 @@
           <span class="heroLabel">GIOCATORE IN ASTA</span>
         </div>
 
-        <div id="aPlayer" class="heroPlayer">Nessun giocatore</div>
+        
+        <div id="adminPlayerAvatar" class="playerAvatar adminPlayerAvatar roleAvatarX">
+          <span id="adminPlayerInitials">--</span>
+        </div>
+
+<div id="aPlayer" class="heroPlayer">Nessun giocatore</div>
 
         <div class="auctionNumbers">
           <div class="priceBlock">
@@ -141,6 +147,15 @@
 
 </main>
 
+<div id="adminSoldOverlay" class="soldOverlay hidden">
+  <div class="soldCard">
+    <div class="soldLabel">AGGIUDICATO</div>
+    <div id="adminSoldAvatar" class="playerAvatar soldAvatar"><span id="adminSoldInitials">--</span></div>
+    <div id="adminSoldPlayer" class="soldPlayer">-</div>
+    <div id="adminSoldTeam" class="soldTeam">-</div>
+    <div id="adminSoldPrice" class="soldPrice">0 cr</div>
+  </div>
+</div>
 <div id="toast" class="toast hidden"></div>
 
 <script src="/socket.io/socket.io.js"></script>
