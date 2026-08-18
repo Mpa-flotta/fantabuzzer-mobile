@@ -100,3 +100,11 @@ Start Command: `node server.js`
 - Dashboard collegata direttamente al timer ufficiale emesso dal server
 - Rimosso il calcolo locale del countdown dalla dashboard
 - Nessuna modifica a durata asta, rilanci, telefoni o assegnazione
+
+## V6.9.4
+- Corretto reset Nuova asta
+- Mantiene i nomi delle squadre
+- Riporta ogni squadra a 1000 crediti
+- Azzera rose, spese e storico
+- Rende di nuovo disponibili tutti i giocatori
+- Chiude e azzera l'asta corrente

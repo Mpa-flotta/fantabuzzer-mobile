@@ -469,18 +469,6 @@ io.on("connection", socket => {
     broadcast();
   });
 
-  
-  socket.on("admin:newAuction", () => {
-    // Ferma eventuale asta in corso
-    clearAuction();
-
-    // Ripristina tutti i giocatori come disponibili
-    state.players.forEach(player => {
-      player.status = "available";
-      player.boughtBy = "";
-      player.boughtPrice = 0;
-    });
-
     // Azzera storico acquisti
     state.purchases = [];
 
@@ -532,6 +520,51 @@ io.on("connection", socket => {
       playerName: player.name,
       previousTeam: last.team,
       previousPrice: last.price
+    });
+
+    broadcast();
+  });
+
+
+  socket.on("admin:newAuction", () => {
+    // Ferma qualsiasi timer/asta corrente.
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+
+    // Ripristina tutti i giocatori.
+    state.players.forEach(player => {
+      player.status = "available";
+      player.boughtBy = "";
+      player.boughtPrice = 0;
+    });
+
+    // Azzera completamente lo storico acquisti.
+    state.purchases = [];
+
+    // Mantiene le squadre esistenti, ma le riporta allo stato iniziale.
+    Object.values(state.teams).forEach(team => {
+      team.budget = 1000;
+      team.spent = 0;
+      team.roster = [];
+    });
+
+    // Ripristina anche l'asta corrente.
+    state.auction = {
+      playerId: null,
+      playerName: "",
+      playerRole: "",
+      price: 0,
+      leader: "",
+      running: false,
+      endsAt: null,
+      duration: 10,
+      history: []
+    };
+
+    io.emit("auction:new", {
+      message: "Nuova asta avviata: tutto azzerato"
     });
 
     broadcast();
