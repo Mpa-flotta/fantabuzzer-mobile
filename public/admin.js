@@ -39,6 +39,17 @@ $("startBtn").onclick = () => {
 $("pauseBtn").onclick = () => socket.emit("admin:pause");
 $("resumeBtn").onclick = () => socket.emit("admin:resume");
 $("resetBtn").onclick = () => socket.emit("admin:resetAuction");
+
+$("newAuctionBtn").onclick = () => {
+  const ok = confirm("Vuoi iniziare una nuova asta? Verranno azzerate tutte le rose, gli acquisti e i crediti spesi. Le squadre resteranno create e torneranno a 1000 crediti.");
+  if (!ok) return;
+  socket.emit("admin:newAuction");
+};
+
+socket.on("auction:new", ({ message }) => {
+  toast(message || "Nuova asta avviata");
+});
+
 $("undoBtn").onclick = () => socket.emit("admin:undoLast");
 
 $("createTeamBtn").onclick = () => {
@@ -109,6 +120,8 @@ function renderResults() {
 }
 
 function renderTeams() {
+  if (!state) return;
+
   const teams = Object.values(state.teams);
 
   $("teams").innerHTML = teams.length
@@ -118,46 +131,46 @@ function renderTeams() {
           if (counts[p.role] !== undefined) counts[p.role]++;
         });
 
+        const remaining = t.budget - t.spent;
+        const remainingSlots = Math.max(0, 25 - t.roster.length);
+        const maxBid = Math.max(0, remaining - Math.max(0, remainingSlots - 1));
+        const isLeader = state.auction.leader === t.name;
+
+        const rosterHtml = t.roster.length
+          ? t.roster.map(p => `
+              <div class="teamPlayerLine">
+                <span class="teamPlayerName">${esc(p.name)}</span>
+                <strong class="teamPlayerPrice">${p.price}</strong>
+              </div>
+            `).join("")
+          : `<div class="teamRosterEmpty">Nessun giocatore acquistato</div>`;
+
         return `
-        <details class="teamBox">
-          <summary>
-            <b>${esc(t.name)}</b> · ${t.budget - t.spent} cr · ${t.roster.length}/25
-          </summary>
+          <div class="teamCardDash ${isLeader ? "currentLeader" : ""}">
+            <div class="teamCardHeader">
+              <b>${esc(t.name)}</b>
+            </div>
 
-          <div class="roleLine">
-            P ${counts.P}/3 · D ${counts.D}/8 · C ${counts.C}/8 · A ${counts.A}/6
+            <div class="teamRoleCounts">
+              <span>P <b>${counts.P}/3</b></span>
+              <span>D <b>${counts.D}/8</b></span>
+              <span>C <b>${counts.C}/8</b></span>
+              <span>A <b>${counts.A}/6</b></span>
+            </div>
+
+            <div class="teamMoneyRow">
+              <span>Budget <b>${remaining}</b></span>
+              <span>Max rilancio <b>${maxBid}</b></span>
+              <span>Rosa <b>${t.roster.length}/25</b></span>
+            </div>
+
+            <div class="teamRosterList">
+              ${rosterHtml}
+            </div>
           </div>
-
-          <div class="budgetBox">
-            <input type="number" min="${t.spent}" value="${t.budget}" data-budget-input="${escAttr(t.name)}">
-            <button data-save-budget="${escAttr(t.name)}">Salva budget</button>
-          </div>
-
-          ${t.roster.length
-            ? t.roster.map(p => `
-              <div class="rowItem">
-                <div>
-                  <b>${esc(p.name)}</b>
-                  <small>${esc(p.role)} · ${esc(p.club)}</small>
-                </div>
-                <strong>${p.price}</strong>
-              </div>`).join("")
-            : `<p class="muted">Rosa vuota</p>`
-          }
-        </details>`;
+        `;
       }).join("")
     : `<p class="muted">Nessuna squadra.</p>`;
-
-  document.querySelectorAll("[data-save-budget]").forEach(btn => {
-    btn.onclick = () => {
-      const team = btn.dataset.saveBudget;
-      const input = document.querySelector(`[data-budget-input="${cssEscape(team)}"]`);
-      socket.emit("admin:setBudget", {
-        team,
-        budget: Number(input.value)
-      });
-    };
-  });
 }
 
 function renderTeamGrid() {
@@ -223,16 +236,26 @@ function renderPurchases() {
 }
 
 function renderTimer() {
-  const a = state?.auction;
-  if (!a?.running || !a.endsAt) {
-    $("aTimer").textContent = "--";
-    const ring = $("timerRing"); if (ring) ring.style.setProperty("--progress", 0);
+  const auction = state?.auction;
+  const timerEl = $("aTimer") || $("timer");
+
+  if (!timerEl) return;
+
+  if (!auction?.running || !auction.endsAt) {
+    timerEl.textContent = "--";
+    if (timerEl.style) timerEl.style.setProperty("--progress", "0deg");
     return;
   }
 
-  const left = Math.max(0, Math.ceil((a.endsAt - Date.now()) / 1000));
-  $("aTimer").textContent = left;
-  const ring = $("timerRing"); if (ring) ring.style.setProperty("--progress", Math.max(0, Math.min(100, (left / (a.duration || 10)) * 100)));
+  const remainingMs = Math.max(0, auction.endsAt - Date.now());
+  const seconds = Math.ceil(remainingMs / 1000);
+  timerEl.textContent = seconds;
+
+  // Il cerchio usa esattamente la durata impostata dall'Admin.
+  const totalMs = (auction.duration || 10) * 1000;
+  const fraction = Math.max(0, Math.min(1, remainingMs / totalMs));
+  const degrees = fraction * 360;
+  timerEl.style.setProperty("--progress", `${degrees}deg`);
 }
 
 setInterval(renderTimer, 150);

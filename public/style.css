@@ -91,3 +91,84 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
 .adminDetails summary{cursor:pointer;font-weight:900;padding:4px}.adminDetails[open] summary{margin-bottom:12px}
 @media(max-width:1050px){.auctionStage{grid-template-columns:1fr}.stageSide{position:static;max-height:none}.teamGrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.teamGrid{grid-template-columns:1fr 1fr}.liveHero{min-height:330px}.timerRing{width:120px;height:120px}.timerRing span{font-size:38px}}
+
+
+/* V6.1 - squadre con rosa completa */
+.teamCardDash{
+  min-width:220px;
+  background:#161b22;
+  border:2px solid #30363d;
+  border-radius:22px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:.18s ease;
+}
+.teamCardDash.currentLeader{
+  border-color:#20e3b2;
+  box-shadow:0 0 0 2px rgba(32,227,178,.15),0 0 24px rgba(32,227,178,.18);
+}
+.teamCardHeader{
+  font-size:18px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.teamRoleCounts{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  text-align:center;
+  font-size:13px;
+}
+.teamMoneyRow{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  padding-top:8px;
+  border-top:1px solid #30363d;
+  text-align:center;
+  font-size:12px;
+}
+.teamMoneyRow span{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  color:#8b949e;
+}
+.teamMoneyRow b{color:#f0f6fc;font-size:17px}
+.teamRosterList{
+  margin-top:4px;
+  border-top:1px solid #30363d;
+  padding-top:6px;
+  max-height:210px;
+  overflow:auto;
+}
+.teamPlayerLine{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:13px;
+}
+.teamPlayerName{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.teamPlayerPrice{
+  flex:0 0 auto;
+  color:#7ee787;
+}
+.teamRosterEmpty{
+  color:#8b949e;
+  text-align:center;
+  padding:12px 0;
+  font-size:12px;
+}
+.newAuctionCard{
+  border-color:#5a2525;
+}

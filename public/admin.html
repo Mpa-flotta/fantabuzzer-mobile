@@ -1,5 +1,14 @@
 <!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Fantabuzzer Regia</title><link rel="stylesheet" href="/style.css"></head><body>
 <main class="wrap adminWrap"><header class="topbar"><div><h1>⚽ Fantabuzzer Live</h1><p class="muted">Regia asta</p></div><a class="linkbtn" href="/">Squadra</a></header>
+
+<section class="card newAuctionCard">
+  <div>
+    <h2>Nuova asta</h2>
+    <p class="muted small">Azzera rose, acquisti e crediti spesi. Le squadre restano create e tornano a 1000 crediti. Tutti i giocatori tornano disponibili.</p>
+  </div>
+  <button id="newAuctionBtn" class="danger full">🔄 Nuova asta da zero</button>
+</section>
+
 <div class="auctionStage"><div class="stageMain">
 <section class="card hero liveHero"><div class="eyebrow">GIOCATORE IN ASTA</div><div id="aPlayer" class="player">In attesa dell'inizio...</div><div id="aRole" class="roleBadge">-</div><div class="priceRow"><div><div class="eyebrow">OFFERTA ATTUALE</div><div id="aPrice" class="price">0</div><div class="muted">crediti</div></div><div><div class="eyebrow">TEMPO</div><div id="timerRing" class="timerRing"><span id="aTimer">--</span></div></div></div><div id="aLeader" class="leader">Nessuna offerta</div></section>
 <div id="teamGrid" class="teamGrid"></div>

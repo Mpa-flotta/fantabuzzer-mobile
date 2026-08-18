@@ -458,7 +458,36 @@ io.on("connection", socket => {
     broadcast();
   });
 
-  socket.on("admin:undoLast", () => {
+  
+  socket.on("admin:newAuction", () => {
+    // Ferma eventuale asta in corso
+    clearAuction();
+
+    // Ripristina tutti i giocatori come disponibili
+    state.players.forEach(player => {
+      player.status = "available";
+      player.boughtBy = "";
+      player.boughtPrice = 0;
+    });
+
+    // Azzera storico acquisti
+    state.purchases = [];
+
+    // Mantiene le squadre create, ma riparte da zero
+    Object.values(state.teams).forEach(team => {
+      team.budget = 1000;
+      team.spent = 0;
+      team.roster = [];
+    });
+
+    io.emit("auction:new", {
+      message: "Nuova asta avviata"
+    });
+
+    broadcast();
+  });
+
+socket.on("admin:undoLast", () => {
     const last = state.purchases.shift();
     if (!last) return;
 

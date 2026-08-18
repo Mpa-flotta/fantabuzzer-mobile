@@ -38,3 +38,8 @@ Start Command: `node server.js`
 - L'Admin può scaricare `fanta-asta-rosters.csv`.
 - Il formato replica il file campione: riga `$,$,$` prima di ogni squadra, poi `Nome Squadra,Id,Prezzo`.
 - Il nome del giocatore non viene inserito nel CSV finale perché il formato campione usa l'ID come riferimento.
+
+## V6.1
+- Timer dashboard sincronizzato con il timer reale dell'asta
+- Nuova asta: azzera rose/acquisti/spese e riporta le squadre a 1000 crediti
+- Elenco completo giocatori acquistati e prezzo sotto ogni squadra
