@@ -28,8 +28,7 @@ const state = {
     leader: "",
     running: false,
     endsAt: null,
-    duration: 10,
-    history: []
+    duration: 10, history: []
   },
   players: [],
   teams: {},

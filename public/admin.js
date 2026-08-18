@@ -237,28 +237,28 @@ function renderPurchases() {
 
 function renderTimer() {
   const auction = state?.auction;
-  const timerEl = $("aTimer") || $("timer");
+  const timerEl = $("aTimer");
 
   if (!timerEl) return;
 
-  if (!auction?.running || !auction.endsAt) {
+  if (!auction || !auction.running || !auction.endsAt) {
     timerEl.textContent = "--";
-    if (timerEl.style) timerEl.style.setProperty("--progress", "0deg");
+    timerEl.style.setProperty("--progress", "0deg");
     return;
   }
 
+  // Fonte unica: timestamp del server. Nessun countdown locale fisso.
   const remainingMs = Math.max(0, auction.endsAt - Date.now());
-  const seconds = Math.ceil(remainingMs / 1000);
-  timerEl.textContent = seconds;
+  const remainingSeconds = Math.ceil(remainingMs / 1000);
+  timerEl.textContent = remainingSeconds;
 
-  // Il cerchio usa esattamente la durata impostata dall'Admin.
-  const totalMs = (auction.duration || 10) * 1000;
+  const durationSeconds = Number(auction.duration) || 10;
+  const totalMs = durationSeconds * 1000;
   const fraction = Math.max(0, Math.min(1, remainingMs / totalMs));
-  const degrees = fraction * 360;
-  timerEl.style.setProperty("--progress", `${degrees}deg`);
+  timerEl.style.setProperty("--progress", `${fraction * 360}deg`);
 }
 
-setInterval(renderTimer, 150);
+setInterval(renderTimer, 100);
 
 function toast(msg) {
   $("toast").textContent = msg;

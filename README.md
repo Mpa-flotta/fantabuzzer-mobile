@@ -43,3 +43,7 @@ Start Command: `node server.js`
 - Timer dashboard sincronizzato con il timer reale dell'asta
 - Nuova asta: azzera rose/acquisti/spese e riporta le squadre a 1000 crediti
 - Elenco completo giocatori acquistati e prezzo sotto ogni squadra
+
+## V6.2
+- Countdown dashboard corretto: legge esclusivamente endsAt e duration dal server
+- Durata predefinita fissata a 10 secondi in server e pannello Admin
