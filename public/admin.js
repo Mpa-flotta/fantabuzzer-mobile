@@ -279,14 +279,20 @@ function renderPurchases() {
 }
 
 function renderTimer() {
-  const auction = state?.auction;
   const ringEl = $("aTimer") || document.querySelector(".tvTimer");
   const valueEl = $("aTimerValue") || ringEl;
   const hero = document.querySelector(".auctionHero");
 
   if (!ringEl || !valueEl) return;
 
-  if (!auction || !auction.running || !auction.endsAt) {
+  // La dashboard usa ESCLUSIVAMENTE il timer ufficiale ricevuto dal server.
+  // In questo modo non dipende dall'orologio del PC/TV e non aggiunge secondi.
+  const running = Boolean(officialTimer?.running);
+  const remainingMs = Math.max(0, Number(officialTimer?.remainingMs) || 0);
+  const seconds = Math.max(0, Number(officialTimer?.remainingSeconds) || 0);
+  const durationSeconds = Math.max(1, Number(officialTimer?.duration) || 10);
+
+  if (!running) {
     valueEl.textContent = "--";
     ringEl.style.setProperty("--progress", "0deg");
     ringEl.classList.remove("timerDanger");
@@ -294,11 +300,8 @@ function renderTimer() {
     return;
   }
 
-  const remainingMs = Math.max(0, Number(auction.endsAt) - Date.now());
-  const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
   valueEl.textContent = seconds;
 
-  const durationSeconds = Number(auction.duration) || 10;
   const totalMs = durationSeconds * 1000;
   const ratio = Math.max(0, Math.min(1, remainingMs / totalMs));
   ringEl.style.setProperty("--progress", `${ratio * 360}deg`);

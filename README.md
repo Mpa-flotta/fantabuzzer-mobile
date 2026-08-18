@@ -95,3 +95,8 @@ Start Command: `node server.js`
 
 ## V6.9.2
 - Corretto il livello grafico del numero nel timer dashboard: ora appare sopra il centro del cerchio.
+
+## V6.9.3
+- Dashboard collegata direttamente al timer ufficiale emesso dal server
+- Rimosso il calcolo locale del countdown dalla dashboard
+- Nessuna modifica a durata asta, rilanci, telefoni o assegnazione
