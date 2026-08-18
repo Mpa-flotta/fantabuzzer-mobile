@@ -612,3 +612,23 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
   .tvTeamCard{height:auto;min-height:290px}
   .controlSplit{grid-template-columns:1fr}
 }
+
+/* V6.6 Blue Arena Theme */
+:root{--arena-blue:#3B82F6;--arena-deep:#0756c9;--arena-green:#42f5a7;--arena-cyan:#55e7ff}
+.tvBody{background:radial-gradient(circle at 50% -15%,rgba(255,255,255,.23),transparent 34%),radial-gradient(circle at 90% 18%,rgba(85,231,255,.13),transparent 25%),linear-gradient(145deg,#3B82F6 0%,#1768df 38%,#0756c9 100%)!important;color:#f8fbff}
+.tvTopbar{padding:8px 14px;border:1px solid rgba(255,255,255,.16);border-radius:20px;background:rgba(4,24,63,.48);backdrop-filter:blur(14px);box-shadow:0 14px 35px rgba(2,19,55,.18)}
+.brandLogo{background:linear-gradient(145deg,#fff,#dbeafe);border:0;box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.brandBlock h1{color:#fff}.brandBlock p{color:#cfe2ff}
+.controlSection{background:rgba(7,28,67,.88);border-color:rgba(255,255,255,.14);box-shadow:0 12px 30px rgba(3,21,54,.14)}
+.controlSection input{background:#091c3b;border-color:rgba(255,255,255,.15);color:#fff}.controlSection input::placeholder{color:#82a8dc}
+.auctionHero{position:relative;overflow:hidden;background:radial-gradient(circle at 50% 10%,rgba(59,130,246,.28),transparent 42%),linear-gradient(155deg,#102d5e 0%,#091d3f 58%,#07152e 100%)!important;border:1px solid rgba(255,255,255,.18);box-shadow:0 24px 65px rgba(1,16,45,.28)}
+.auctionHero::before{content:"";position:absolute;width:420px;height:420px;border-radius:50%;border:1px solid rgba(85,231,255,.08);left:50%;top:45%;transform:translate(-50%,-50%);box-shadow:0 0 0 55px rgba(85,231,255,.025),0 0 0 110px rgba(85,231,255,.018);pointer-events:none}.auctionHero>*{position:relative;z-index:1}
+.heroPlayer{color:#fff;text-shadow:0 5px 28px rgba(0,0,0,.28)}.heroLabel,.numberLabel,.leaderCaption{color:#9ec5ff}.bigPrice{color:#fff;text-shadow:0 0 32px rgba(85,231,255,.18)}.bigPrice small{color:#9ec5ff}
+.tvTimer{background:radial-gradient(circle,#0a2147 58%,transparent 60%),conic-gradient(#55e7ff var(--progress,0deg),rgba(255,255,255,.10) 0)!important;color:#fff;box-shadow:0 0 38px rgba(85,231,255,.16)}
+.heroLeader{background:linear-gradient(90deg,rgba(66,245,167,.14),rgba(85,231,255,.10));color:#75ffc0;border-color:rgba(66,245,167,.24)}
+.liveDot{background:#42f5a7;box-shadow:0 0 16px rgba(66,245,167,.95)}.stageStatusBar{color:#d7e8ff}
+.teamsArea{padding:12px;border-radius:22px;background:rgba(5,26,64,.30);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(8px)}.teamsHeader h2{color:#fff}.teamsHeader p{color:#b7d2f8}
+.tvTeamCard{background:linear-gradient(180deg,rgba(15,45,92,.96),rgba(7,27,59,.98))!important;border-color:rgba(255,255,255,.14);box-shadow:0 10px 24px rgba(2,18,48,.16)}
+.tvTeamCard.currentLeader{border-color:#42f5a7!important;box-shadow:0 0 0 2px rgba(66,245,167,.15),0 0 28px rgba(66,245,167,.28),0 12px 30px rgba(2,18,48,.20)!important}.tvTeamName{color:#fff}
+.tvTeamStats div{background:rgba(2,17,43,.58)}.tvTeamStats span{color:#8fb5e9}.tvTeamStats strong{color:#fff}.tvRoles div{background:rgba(19,59,116,.78);border:1px solid rgba(255,255,255,.07)}.tvRoles span{color:#9fc5f7}.tvRoster{border-color:rgba(255,255,255,.10)}.tvRosterRole{background:#174a91;color:#d9ebff}.tvRosterPrice{color:#66f6b5}.tvRosterEmpty{color:#8fb5e9}.leadingBadge{color:#06291b;background:#42f5a7;font-weight:950}
+.primary,.bigAction{background:linear-gradient(135deg,#3B82F6,#55b7ff)!important;border-color:rgba(255,255,255,.12)!important;box-shadow:0 8px 20px rgba(23,104,223,.24)}.controlToggle,.linkbtn{background:rgba(8,32,76,.78)!important;border:1px solid rgba(255,255,255,.14)!important;color:#fff!important}.downloadCsvBtn{background:linear-gradient(135deg,#16a36a,#42f5a7);color:#041d14}
