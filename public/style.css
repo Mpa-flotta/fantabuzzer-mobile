@@ -172,3 +172,443 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
 .newAuctionCard{
   border-color:#5a2525;
 }
+
+
+/* ===== Fantabuzzer V6.5 - TV / Regia Dashboard ===== */
+
+.tvBody{
+  background:
+    radial-gradient(circle at 70% 5%, rgba(47,129,247,.12), transparent 30%),
+    #090d13;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.tvDashboard{
+  width:100%;
+  min-height:100vh;
+  padding:16px 18px 30px;
+}
+
+.tvTopbar{
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:14px;
+}
+
+.brandBlock{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brandLogo{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  font-size:28px;
+  border-radius:15px;
+  background:#161b22;
+  border:1px solid #30363d;
+}
+.brandBlock h1{
+  font-size:26px;
+  margin:0;
+}
+.brandBlock p{
+  color:#8b949e;
+  margin:3px 0 0;
+  font-size:13px;
+}
+
+.topActions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.controlToggle{
+  background:#21262d;
+}
+
+.tvMainGrid{
+  display:grid;
+  grid-template-columns:330px minmax(0,1fr);
+  gap:16px;
+  align-items:start;
+}
+
+.controlPanel{
+  position:sticky;
+  top:12px;
+  height:calc(100vh - 32px);
+  transition:.2s ease;
+}
+.controlPanel.collapsed{
+  width:0;
+  opacity:0;
+  overflow:hidden;
+  pointer-events:none;
+}
+.controlPanelInner{
+  height:100%;
+  overflow:auto;
+  padding-right:4px;
+}
+.controlSection{
+  background:#111720;
+  border:1px solid #29313c;
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:10px;
+}
+.controlSection h2{
+  font-size:16px;
+  margin-bottom:10px;
+}
+.controlSection h3{
+  margin:16px 0 8px;
+  font-size:14px;
+}
+.controlSplit{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:8px;
+}
+.controlSplit label span{
+  display:block;
+  font-size:11px;
+  color:#8b949e;
+  margin-bottom:4px;
+}
+.compactControls{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+.bigAction{
+  min-height:52px;
+}
+.utilityPanel summary{
+  cursor:pointer;
+  font-weight:800;
+}
+.utilityContent{
+  padding-top:10px;
+}
+.utilityList{
+  max-height:240px;
+  overflow:auto;
+}
+.downloadCsvBtn{
+  display:block;
+  margin-top:12px;
+  text-align:center;
+  padding:12px;
+  border-radius:12px;
+  background:#238636;
+  color:#fff;
+  text-decoration:none;
+  font-weight:800;
+}
+
+.auctionStage{
+  min-width:0;
+}
+
+.stageStatusBar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.16em;
+  color:#aeb7c4;
+  margin:3px 0 8px;
+}
+.liveDot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#2ea043;
+  box-shadow:0 0 14px rgba(46,160,67,.8);
+}
+
+.auctionHero{
+  min-height:430px;
+  padding:26px 30px;
+  border-radius:28px;
+  background:
+    linear-gradient(160deg, rgba(29,78,216,.20), transparent 45%),
+    linear-gradient(180deg,#131a24,#0d1219);
+  border:1px solid #2a3440;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  text-align:center;
+}
+
+.auctionHeroTop{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+}
+.heroLabel{
+  font-size:12px;
+  letter-spacing:.18em;
+  color:#8b949e;
+  font-weight:900;
+}
+.largeRole{
+  min-width:42px;
+  font-size:15px;
+}
+.heroPlayer{
+  margin:16px auto 20px;
+  font-size:clamp(38px,5vw,76px);
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.035em;
+  max-width:1100px;
+}
+
+.auctionNumbers{
+  max-width:760px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+  align-items:center;
+}
+.numberLabel{
+  display:block;
+  font-size:11px;
+  letter-spacing:.14em;
+  color:#8b949e;
+  margin-bottom:8px;
+  font-weight:900;
+}
+.bigPrice{
+  font-size:clamp(58px,7vw,104px);
+  line-height:1;
+  font-weight:950;
+}
+.bigPrice small{
+  font-size:.22em;
+  color:#8b949e;
+  margin-left:4px;
+}
+.tvTimer{
+  width:150px;
+  height:150px;
+  font-size:56px;
+  margin:auto;
+}
+
+.leaderBlock{
+  margin:22px auto 0;
+  max-width:700px;
+}
+.leaderCaption{
+  display:block;
+  font-size:11px;
+  letter-spacing:.15em;
+  color:#8b949e;
+  margin-bottom:7px;
+}
+.heroLeader{
+  padding:13px 18px;
+  border-radius:16px;
+  font-size:clamp(22px,2.5vw,34px);
+  font-weight:950;
+  background:rgba(35,134,54,.16);
+  color:#7ee787;
+  border:1px solid rgba(126,231,135,.15);
+}
+
+.teamsArea{
+  margin-top:14px;
+}
+.teamsHeader{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+.teamsHeader h2{
+  font-size:18px;
+  margin:0;
+}
+.teamsHeader p{
+  font-size:12px;
+  color:#8b949e;
+  margin:3px 0 0;
+}
+
+.teamsTvGrid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+}
+
+.tvTeamCard{
+  min-width:0;
+  height:315px;
+  display:flex;
+  flex-direction:column;
+  border-radius:18px;
+  padding:12px;
+  background:#111720;
+  border:2px solid #28313c;
+  transition:.18s ease;
+}
+.tvTeamCard.currentLeader{
+  border-color:#21d4a7;
+  box-shadow:0 0 0 2px rgba(33,212,167,.10),0 0 26px rgba(33,212,167,.18);
+  transform:translateY(-2px);
+}
+.tvTeamHeader{
+  min-height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:6px;
+}
+.tvTeamName{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:15px;
+  font-weight:950;
+}
+.leadingBadge{
+  flex:0 0 auto;
+  padding:4px 6px;
+  border-radius:999px;
+  font-size:8px;
+  letter-spacing:.08em;
+  color:#7ee787;
+  background:rgba(35,134,54,.2);
+}
+.tvTeamStats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin-top:7px;
+}
+.tvTeamStats div{
+  padding:7px 4px;
+  background:#0b1016;
+  border-radius:9px;
+  text-align:center;
+}
+.tvTeamStats span{
+  display:block;
+  font-size:8px;
+  color:#8b949e;
+  text-transform:uppercase;
+}
+.tvTeamStats strong{
+  display:block;
+  font-size:15px;
+  margin-top:2px;
+}
+.tvRoles{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:4px;
+  margin-top:6px;
+}
+.tvRoles div{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:5px 2px;
+  border-radius:8px;
+  background:#171e27;
+  font-size:10px;
+}
+.tvRoles span{
+  color:#8b949e;
+}
+.tvRoster{
+  flex:1;
+  overflow:auto;
+  margin-top:7px;
+  padding-top:5px;
+  border-top:1px solid #29313c;
+}
+.tvRosterRow{
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr) auto;
+  gap:5px;
+  align-items:center;
+  padding:4px 0;
+  border-bottom:1px solid rgba(255,255,255,.045);
+  font-size:10px;
+}
+.tvRosterRole{
+  display:grid;
+  place-items:center;
+  width:20px;
+  height:20px;
+  border-radius:6px;
+  background:#212a35;
+  font-weight:900;
+  color:#9db7d4;
+}
+.tvRosterName{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-weight:750;
+}
+.tvRosterPrice{
+  color:#7ee787;
+}
+.tvRosterEmpty,.emptyTeams{
+  color:#6e7681;
+  text-align:center;
+  padding:14px 0;
+  font-size:11px;
+}
+
+.tvResults{
+  max-height:320px;
+}
+
+@media(max-width:1400px){
+  .tvMainGrid{grid-template-columns:290px minmax(0,1fr)}
+  .teamsTvGrid{grid-template-columns:repeat(5,minmax(150px,1fr))}
+  .tvTeamCard{height:285px;padding:10px}
+  .auctionHero{min-height:390px}
+}
+
+@media(max-width:1100px){
+  .tvMainGrid{grid-template-columns:1fr}
+  .controlPanel{
+    position:relative;
+    height:auto;
+  }
+  .teamsTvGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .tvTeamCard{height:330px}
+}
+
+@media(max-width:650px){
+  .tvDashboard{padding:10px}
+  .tvTopbar{align-items:flex-start}
+  .topActions{flex-direction:column;align-items:flex-end}
+  .auctionHero{padding:20px 12px;min-height:auto}
+  .auctionNumbers{gap:10px}
+  .tvTimer{width:112px;height:112px;font-size:42px}
+  .teamsTvGrid{grid-template-columns:1fr}
+  .tvTeamCard{height:auto;min-height:290px}
+  .controlSplit{grid-template-columns:1fr}
+}

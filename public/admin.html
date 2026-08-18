@@ -1,20 +1,158 @@
-<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Fantabuzzer Regia</title><link rel="stylesheet" href="/style.css"></head><body>
-<main class="wrap adminWrap"><header class="topbar"><div><h1>⚽ Fantabuzzer Live</h1><p class="muted">Regia asta</p></div><a class="linkbtn" href="/">Squadra</a></header>
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fantabuzzer - Regia Asta</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body class="tvBody">
 
-<section class="card newAuctionCard">
-  <div>
-    <h2>Nuova asta</h2>
-    <p class="muted small">Azzera rose, acquisti e crediti spesi. Le squadre restano create e tornano a 1000 crediti. Tutti i giocatori tornano disponibili.</p>
-  </div>
-  <button id="newAuctionBtn" class="danger full">🔄 Nuova asta da zero</button>
-</section>
+<main class="tvDashboard">
 
-<div class="auctionStage"><div class="stageMain">
-<section class="card hero liveHero"><div class="eyebrow">GIOCATORE IN ASTA</div><div id="aPlayer" class="player">In attesa dell'inizio...</div><div id="aRole" class="roleBadge">-</div><div class="priceRow"><div><div class="eyebrow">OFFERTA ATTUALE</div><div id="aPrice" class="price">0</div><div class="muted">crediti</div></div><div><div class="eyebrow">TEMPO</div><div id="timerRing" class="timerRing"><span id="aTimer">--</span></div></div></div><div id="aLeader" class="leader">Nessuna offerta</div></section>
-<div id="teamGrid" class="teamGrid"></div>
-<section class="card compactCard"><div class="stageTools"><button id="pauseBtn">⏸ Pausa</button><button id="resumeBtn">▶ Riprendi</button></div><button id="resetBtn" class="danger full">Annulla asta corrente</button></section>
-</div><aside class="stageSide">
-<section class="card"><h2>Chiama giocatore</h2><input id="search" placeholder="Cerca calciatore, ruolo o club..."><div id="results" class="results"></div><div class="two"><input id="startPrice" type="number" value="1" min="0"><input id="duration" type="number" value="10" min="3" max="30"></div><button id="startBtn" class="primary">Avvia asta</button></section>
-<section class="card"><details class="adminDetails"><summary>⚙ Gestione asta</summary><h2>Importa Excel</h2><input id="file" type="file" accept=".xlsx,.xls"><button id="importBtn" class="primary">Importa Excel</button><p id="importInfo" class="muted"></p><hr><h2>Squadre e budget</h2><div class="two"><input id="newTeam" placeholder="Nome squadra"><input id="newBudget" type="number" value="1000"></div><button id="createTeamBtn" class="primary">Aggiungi squadra</button><div id="teams"></div></details></section>
-<section class="card"><details class="adminDetails"><summary>📋 Lista e storico</summary><input id="poolFilter" placeholder="Filtra elenco..."><p id="counts" class="muted"></p><div id="players"></div><h2 style="margin-top:18px">Storico acquisti</h2><div class="two"><button id="undoBtn">↩ Annulla ultimo</button><a class="linkbtn exportBtn" href="/api/export-auction-csv">⬇ CSV asta</a></div><div id="purchases"></div></details></section>
-</aside></div></main><div id="toast" class="toast hidden"></div><script src="/socket.io/socket.io.js"></script><script src="/admin.js"></script></body></html>
+  <header class="tvTopbar">
+    <div class="brandBlock">
+      <div class="brandLogo">⚽</div>
+      <div>
+        <h1>Fantabuzzer</h1>
+        <p>Regia asta</p>
+      </div>
+    </div>
+
+    <div class="topActions">
+      <a class="linkbtn" href="/">Pagina squadra</a>
+      <button id="toggleControlBtn" class="controlToggle">☰ Comandi</button>
+    </div>
+  </header>
+
+  <section class="tvMainGrid">
+
+    <aside id="controlPanel" class="controlPanel">
+      <div class="controlPanelInner">
+
+        <section class="controlSection">
+          <h2>Giocatore da chiamare</h2>
+          <input id="search" placeholder="Cerca nome, ruolo o squadra...">
+          <div id="results" class="results tvResults"></div>
+
+          <div class="controlSplit">
+            <label>
+              <span>Base</span>
+              <input id="startPrice" type="number" value="1" min="0">
+            </label>
+            <label>
+              <span>Timer</span>
+              <input id="duration" type="number" value="10" min="3" max="30">
+            </label>
+          </div>
+
+          <button id="startBtn" class="primary bigAction">▶ Avvia asta</button>
+        </section>
+
+        <section class="controlSection compactControls">
+          <button id="pauseBtn">⏸ Pausa</button>
+          <button id="resumeBtn">▶ Riprendi</button>
+          <button id="resetBtn" class="danger">✕ Annulla</button>
+        </section>
+
+        <details class="controlSection utilityPanel">
+          <summary>Gestione asta</summary>
+
+          <div class="utilityContent">
+            <h3>Importa Excel</h3>
+            <input id="file" type="file" accept=".xlsx,.xls">
+            <button id="importBtn" class="primary">Importa giocatori</button>
+            <p id="importInfo" class="muted small"></p>
+
+            <h3>Nuova asta</h3>
+            <button id="newAuctionBtn" class="danger full">🔄 Nuova asta da zero</button>
+
+            <h3>Aggiungi squadra</h3>
+            <div class="controlSplit">
+              <input id="newTeam" placeholder="Nome squadra">
+              <input id="newBudget" type="number" value="1000" min="1">
+            </div>
+            <button id="createTeamBtn" class="primary">Aggiungi squadra</button>
+
+            <h3>Giocatori</h3>
+            <input id="poolFilter" placeholder="Filtra elenco...">
+            <p id="counts" class="muted small"></p>
+            <div id="players" class="utilityList"></div>
+
+            <h3>Storico acquisti</h3>
+            <button id="undoBtn">↩ Annulla ultimo acquisto</button>
+            <div id="purchases" class="utilityList"></div>
+
+            <a href="/api/export-auction-csv" class="downloadCsvBtn">⬇ Scarica CSV asta</a>
+          </div>
+        </details>
+
+      </div>
+    </aside>
+
+    <section class="auctionStage">
+
+      <div class="stageStatusBar">
+        <span class="liveDot"></span>
+        <span id="stageStatusText">ASTA PRONTA</span>
+      </div>
+
+      <div class="auctionHero">
+        <div class="auctionHeroTop">
+          <span id="aRole" class="roleBadge largeRole">-</span>
+          <span class="heroLabel">GIOCATORE IN ASTA</span>
+        </div>
+
+        <div id="aPlayer" class="heroPlayer">Nessun giocatore</div>
+
+        <div class="auctionNumbers">
+          <div class="priceBlock">
+            <span class="numberLabel">PREZZO ATTUALE</span>
+            <div class="bigPrice">
+              <span id="aPrice">0</span>
+              <small>cr</small>
+            </div>
+          </div>
+
+          <div class="timerBlock">
+            <span class="numberLabel">TEMPO</span>
+            <div id="aTimer" class="timerRing tvTimer">--</div>
+          </div>
+        </div>
+
+        <div class="leaderBlock">
+          <span class="leaderCaption">IN TESTA</span>
+          <div id="aLeader" class="heroLeader">Nessuna offerta</div>
+        </div>
+      </div>
+
+      <section class="teamsArea">
+        <div class="teamsHeader">
+          <div>
+            <h2>Squadre</h2>
+            <p>Budget, composizione rosa e acquisti</p>
+          </div>
+        </div>
+        <div id="teams" class="teamsTvGrid"></div>
+      </section>
+
+    </section>
+  </section>
+
+</main>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/admin.js"></script>
+<script>
+  const toggle = document.getElementById("toggleControlBtn");
+  const panel = document.getElementById("controlPanel");
+  if (toggle && panel) {
+    toggle.addEventListener("click", () => {
+      panel.classList.toggle("collapsed");
+    });
+  }
+</script>
+</body>
+</html>

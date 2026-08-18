@@ -56,3 +56,11 @@ Start Command: `node server.js`
 ## V6.4
 - Countdown calcolato esclusivamente dal server e trasmesso identico a dashboard e telefoni ogni 100 ms.
 - Eliminata ogni dipendenza dall’orologio locale dei dispositivi.
+
+## V6.5
+- Nuova dashboard PC/TV stile regia
+- Asta centrale con giocatore, timer, prezzo e squadra in testa
+- Griglia 5x2 delle 10 squadre
+- Rosa completa e prezzo sotto ogni squadra
+- Pannello comandi laterale richiudibile
+- Logica asta/timer V6.4 invariata

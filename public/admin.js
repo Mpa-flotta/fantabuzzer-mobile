@@ -89,6 +89,13 @@ socket.on("state", s => {
   $("aPrice").textContent = a.price;
   $("aLeader").textContent = a.leader ? `In testa: ${a.leader}` : "Nessuna offerta";
 
+  const stageText = document.getElementById("stageStatusText");
+  if (stageText) {
+    if (a.running) stageText.textContent = "ASTA IN CORSO";
+    else if (a.playerId) stageText.textContent = "ASTA TERMINATA";
+    else stageText.textContent = "ASTA PRONTA";
+  }
+
   renderResults();
   renderTeams();
   renderTeamGrid();
@@ -146,39 +153,41 @@ function renderTeams() {
 
         const rosterHtml = t.roster.length
           ? t.roster.map(p => `
-              <div class="teamPlayerLine">
-                <span class="teamPlayerName">${esc(p.name)}</span>
-                <strong class="teamPlayerPrice">${p.price}</strong>
+              <div class="tvRosterRow">
+                <span class="tvRosterRole">${esc(p.role)}</span>
+                <span class="tvRosterName">${esc(p.name)}</span>
+                <strong class="tvRosterPrice">${p.price}</strong>
               </div>
             `).join("")
-          : `<div class="teamRosterEmpty">Nessun giocatore acquistato</div>`;
+          : `<div class="tvRosterEmpty">Nessun acquisto</div>`;
 
         return `
-          <div class="teamCardDash ${isLeader ? "currentLeader" : ""}">
-            <div class="teamCardHeader">
-              <b>${esc(t.name)}</b>
+          <article class="tvTeamCard ${isLeader ? "currentLeader" : ""}">
+            <div class="tvTeamHeader">
+              <div class="tvTeamName">${esc(t.name)}</div>
+              ${isLeader ? `<div class="leadingBadge">IN TESTA</div>` : ``}
             </div>
 
-            <div class="teamRoleCounts">
-              <span>P <b>${counts.P}/3</b></span>
-              <span>D <b>${counts.D}/8</b></span>
-              <span>C <b>${counts.C}/8</b></span>
-              <span>A <b>${counts.A}/6</b></span>
+            <div class="tvTeamStats">
+              <div><span>Budget</span><strong>${remaining}</strong></div>
+              <div><span>Max</span><strong>${maxBid}</strong></div>
+              <div><span>Rosa</span><strong>${t.roster.length}/25</strong></div>
             </div>
 
-            <div class="teamMoneyRow">
-              <span>Budget <b>${remaining}</b></span>
-              <span>Max rilancio <b>${maxBid}</b></span>
-              <span>Rosa <b>${t.roster.length}/25</b></span>
+            <div class="tvRoles">
+              <div><span>P</span><b>${counts.P}/3</b></div>
+              <div><span>D</span><b>${counts.D}/8</b></div>
+              <div><span>C</span><b>${counts.C}/8</b></div>
+              <div><span>A</span><b>${counts.A}/6</b></div>
             </div>
 
-            <div class="teamRosterList">
+            <div class="tvRoster">
               ${rosterHtml}
             </div>
-          </div>
+          </article>
         `;
       }).join("")
-    : `<p class="muted">Nessuna squadra.</p>`;
+    : `<div class="emptyTeams">Nessuna squadra collegata</div>`;
 }
 
 function renderTeamGrid() {
