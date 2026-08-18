@@ -280,29 +280,32 @@ function renderPurchases() {
 
 function renderTimer() {
   const auction = state?.auction;
-  const timerEl = $("aTimer");
-  const hero = document.querySelector(".auctionHero");
+  const timerEl =
+    $("aTimer") ||
+    $("timer") ||
+    document.querySelector(".tvTimer");
 
+  const hero = document.querySelector(".auctionHero");
   if (!timerEl) return;
 
   if (!auction || !auction.running || !auction.endsAt) {
     timerEl.textContent = "--";
-    timerEl.style.setProperty("--progress", "0");
+    timerEl.style.setProperty("--progress", "0deg");
     timerEl.classList.remove("timerDanger");
     hero?.classList.remove("auctionClosing");
     return;
   }
 
-  const remainingMs = Math.max(0, auction.endsAt - Date.now());
-  const seconds = Math.ceil(remainingMs / 1000);
+  const remainingMs = Math.max(0, Number(auction.endsAt) - Date.now());
+  const seconds = Math.max(0, Math.ceil(remainingMs / 1000));
   timerEl.textContent = seconds;
 
   const durationSeconds = Number(auction.duration) || 10;
   const totalMs = durationSeconds * 1000;
-  const pct = Math.max(0, Math.min(100, (remainingMs / totalMs) * 100));
-  timerEl.style.setProperty("--progress", pct);
+  const ratio = Math.max(0, Math.min(1, remainingMs / totalMs));
+  timerEl.style.setProperty("--progress", `${ratio * 360}deg`);
 
-  const danger = seconds <= 3;
+  const danger = seconds <= 3 && seconds > 0;
   timerEl.classList.toggle("timerDanger", danger);
   hero?.classList.toggle("auctionClosing", danger);
 }

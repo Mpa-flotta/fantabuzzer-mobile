@@ -88,3 +88,7 @@ Start Command: `node server.js`
 - Squadra in testa più evidente
 - Nuovo comando Admin per riaprire l'ultimo giocatore
 - Logica timer/rilanci della V6.8 mantenuta
+
+## V6.9.1
+- Corretto esclusivamente il rendering del countdown nella dashboard TV
+- Nessuna modifica alla logica server, ai rilanci o alla sincronizzazione del timer
