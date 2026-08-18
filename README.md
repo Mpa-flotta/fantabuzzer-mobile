@@ -92,3 +92,6 @@ Start Command: `node server.js`
 ## V6.9.1
 - Corretto esclusivamente il rendering del countdown nella dashboard TV
 - Nessuna modifica alla logica server, ai rilanci o alla sincronizzazione del timer
+
+## V6.9.2
+- Corretto il livello grafico del numero nel timer dashboard: ora appare sopra il centro del cerchio.

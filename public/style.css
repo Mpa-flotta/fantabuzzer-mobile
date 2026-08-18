@@ -1324,3 +1324,22 @@ button,.linkbtn{border:0;border-radius:14px;padding:13px 16px;background:#30363d
   .roleSpendSummary{grid-template-columns:repeat(5,1fr);gap:4px}
   .roleSpendSummary b{font-size:12px}
 }
+
+
+/* V6.9.2 - numero countdown sopra il centro del timer */
+.tvTimer{position:relative;isolation:isolate}
+.tvTimer::before{z-index:0}
+.tvTimer #aTimerValue{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  color:#fff;
+  font-size:56px;
+  line-height:1;
+  font-weight:950;
+  text-shadow:0 3px 16px rgba(0,0,0,.35);
+}
+@media(max-width:650px){.tvTimer #aTimerValue{font-size:42px}}
