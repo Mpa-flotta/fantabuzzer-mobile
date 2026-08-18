@@ -72,6 +72,7 @@ socket.on("state", s => {
 
   renderResults();
   renderTeams();
+  renderTeamGrid();
   renderPlayers();
   renderPurchases();
   renderTimer();
@@ -159,6 +160,25 @@ function renderTeams() {
   });
 }
 
+function renderTeamGrid() {
+  if (!state) return;
+  const teams = Object.values(state.teams);
+  const leader = state.auction.leader;
+  $("teamGrid").innerHTML = teams.length ? teams.map(t => {
+    const counts = {P:0,D:0,C:0,A:0};
+    t.roster.forEach(p => { if (counts[p.role] !== undefined) counts[p.role]++; });
+    const remaining = t.budget - t.spent;
+    const slotsLeft = Math.max(0, 25 - t.roster.length);
+    const maxBid = slotsLeft ? Math.max(0, remaining - Math.max(0, slotsLeft - 1)) : 0;
+    const last = t.roster.length ? t.roster[t.roster.length - 1] : null;
+    return `<div class="teamTile ${leader === t.name ? "leading" : ""}">
+      <div><div class="teamName">${esc(t.name)}</div><div class="lastPlayer">${last ? `Ultimo: <b>${esc(last.name)}</b> · ${last.price}` : "Nessun calciatore acquistato"}</div></div>
+      <div><div class="teamStats"><span>P<b>${counts.P}/3</b></span><span>D<b>${counts.D}/8</b></span><span>C<b>${counts.C}/8</b></span><span>A<b>${counts.A}/6</b></span></div>
+      <div class="teamBudget"><span>Budget<br><b>${remaining}</b></span><span>Max rilancio<br><b>${maxBid}</b></span><span>Rosa<br><b>${t.roster.length}/25</b></span></div></div>
+    </div>`;
+  }).join("") : `<p class="muted">Le squadre compariranno qui quando entreranno.</p>`;
+}
+
 function renderPlayers() {
   if (!state) return;
   const q = $("poolFilter").value.trim().toLowerCase();
@@ -206,10 +226,13 @@ function renderTimer() {
   const a = state?.auction;
   if (!a?.running || !a.endsAt) {
     $("aTimer").textContent = "--";
+    const ring = $("timerRing"); if (ring) ring.style.setProperty("--progress", 0);
     return;
   }
 
-  $("aTimer").textContent = Math.max(0, Math.ceil((a.endsAt - Date.now()) / 1000));
+  const left = Math.max(0, Math.ceil((a.endsAt - Date.now()) / 1000));
+  $("aTimer").textContent = left;
+  const ring = $("timerRing"); if (ring) ring.style.setProperty("--progress", Math.max(0, Math.min(100, (left / (a.duration || 10)) * 100)));
 }
 
 setInterval(renderTimer, 150);
